@@ -1,4 +1,5 @@
 float x, y, vy, vx, a;
+Shooter gun1;
 void setup() {
   size(800, 600);
   x = width/2;
@@ -6,6 +7,8 @@ void setup() {
   vx = 5;
   vy = -5;
   a = 1;
+  
+  gun1 = new Shooter(255, x+2, y+3, 5, 2);
 }
 
 void draw() {
@@ -20,4 +23,7 @@ void draw() {
       x+=-vx;
     }
   }
+  
+  gun1.display();
+  gun1.update();
 }
