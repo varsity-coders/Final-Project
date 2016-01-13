@@ -1,4 +1,5 @@
 class Shooter {
+<<<<<<< HEAD
   PVector loc;  //bottom left point
   float l1, l2, h1, h2; //declare lengths and height of gun
   float c; //set color
@@ -37,4 +38,6 @@ class Shooter {
   void update() {
     loc.set(x,y);
   }
+=======
+>>>>>>> origin/Development-Branch
 }
