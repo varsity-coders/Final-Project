@@ -1,7 +1,7 @@
 
 //Shooter gun1;
 
-float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d;
+float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d, rw4, rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3;
 
 PImage zig, dreams;
 PFont cool;
@@ -19,9 +19,19 @@ void setup() {
   rw2=138;
   rw3=137;
   rx=450;
+  rx1=443;
+  rx2=385;
+  rx3=315;
   ry1=495;
   ry2=595;
   ry3=695;
+  rw4=115;
+  rw5=225;
+  rw6=365;
+  rh1=30;
+  ry4=478;
+  ry5=578;
+  ry6=678;
 }
 
 void draw() {
@@ -83,10 +93,46 @@ void draw() {
   if (stage==4) {
     background(0);
     textAlign(CENTER);
-    text("Sound", 500, 400);
-    text("How To Play", 500, 500);
-    text("About The Creators", 500,600);
+    textSize(48);
+    text("SETTINGS", 500, 100);
+    textSize(32);
+    text("Sound", 500, 500);
+    noFill();
+    rect(rx1, ry4, rw4, rh1);
+    fill(c);
+    text("How To Play", 500, 600);
+    noFill();
+    rect(rx2, ry5, rw5, rh1);
+    fill(r);
+    text("About The Creators", 500, 700);
+    noFill();
+    rect(rx3, ry6, rw6, rh1);
+    fill(d);
     dreams = loadImage("DnN.png");
-    image(dreams, 375,100,250,250);
+    image(dreams, 375, 175, 250, 250);
+  }
+  if (mouseX>=rx1&& mouseX<=rx1+rw4&& mouseY>=ry4 && mouseY<=ry4+rh1) {
+    c=255;
+    if (mousePressed) {
+      stage=2;
+    }
+  } else {
+    c=50;
+  }
+  if (mouseX>=rx1&& mouseX<=rx1+rw5&& mouseY>=ry5 && mouseY<=ry5+rh1) {
+    r=255;
+    if (mousePressed) {
+      stage=3;
+    }
+  } else {
+    r=50;
+  }
+  if (mouseX>=rx1&& mouseX<=rx1+rw6&& mouseY>=ry6 && mouseY<=ry6+rh1) {
+    d=255;
+    if (mousePressed) {
+      stage=4;
+    }
+  } else {
+    d=50;
   }
 }
