@@ -1,47 +1,86 @@
 
-float x, y, vy, vx, a;
-Shooter gun1;
+//Shooter gun1;
+
+float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d;
+
 PImage zig;
 PFont cool;
 
 void setup() {
-  size(800, 600);
+  size(1000, 800);
   x = width/2;
   y = height/2;
-  vx = 5;
-  vy = -5;
-  a = 1;
-  
-  gun1 = new Shooter(255, x+2, y+3, 5, 2);
+
+  vy = 5;
+  vy = 5;
+  stage=1;
+  rh=50;
+  rw1=146;
+  rw2=138;
+  rw3=137;
+  rx=450;
+  ry1=495;
+  ry2=595;
+  ry3=695;
 }
 
 void draw() {
-  cool = loadFont("BankGothicBT-Medium-48.vlw");
-  zig = loadImage("ZIG.png");
-  background(0);
-
-  fill(random(255), random(255), random(255));
-  ellipse(x, y, 10, 10);
-  if (keyPressed) {
-    if (keyCode == RIGHT) {
-      x+=vx;
+  if (stage==1) {    
+    cool = loadFont("BankGothicBT-Medium-48.vlw");
+    zig = loadImage("ZIG.png");
+    background(0);
+    image(zig, 0, 150, 1000, 300);
+    textFont(cool);
+    textSize(64);
+    fill(255);
+    text("DREAMS AND NIGHTMARES", 0, 100);
+    textSize(24);
+    noFill();
+    stroke(255);
+    strokeWeight(1);
+    rect(rx, ry1, rw1, rh);
+    fill(c);
+    text("CAMPAIGN", 450, 525);
+    noFill();
+    rect(rx, ry2, rw2, rh);
+    fill(r);
+    text("SURVIVAL", 450, 625);
+    noFill();
+    rect(rx, ry3, rw3, rh);
+    fill(d);
+    text("SETTINGS", 450, 725);
+    if (mouseX>=rx && mouseX<=rx+rw1 && mouseY>=ry1 && mouseY<=ry1+rh) {
+      c=255;
+      if (mousePressed) {
+        stage=2;
+      }
+    } else {
+      c=50;
     }
-    if (keyCode == LEFT) {
-      x+=-vx;
+    if (mouseX>=rx && mouseX<=rx+rw2 && mouseY>=ry2 && mouseY<=ry2+rh) {
+      r=255;
+      if (mousePressed) {
+        stage=3;
+      }
+    } else {
+      r=50;
+    }
+    if (mouseX>=rx && mouseX<=rx+rw3 && mouseY>=ry3 && mouseY<=ry3+rh) {
+      d=255;
+      if (mousePressed) {
+        stage=4;
+      }
+    } else {
+      d=50;
     }
   }
-  
-  gun1.display();
-  gun1.update();
-
-  image(zig, 0, 100, 1000, 250);
-  textFont(cool);
-  textSize(64);
-  text("DREAMS AND NIGHTMARES", 0, 75);
-  textSize(24);
-  text("CAMPAIGN", 350, 400);
-  text("SURVIVAL", 350, 500);
-  text("SETTINGS", 350, 600);
-  fill(255);
-
+  if (stage==2) {
+    background(255);
+  }
+  if (stage==3) {
+    background(random(255), random(255), random(255));
+  }
+  if (stage==4) {
+    background(255, 0, 0);
+  }
 }
