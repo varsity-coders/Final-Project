@@ -3,7 +3,7 @@
 
 float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d, rw4, rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3;
 
-PImage zig, dreams;
+PImage zig, dreams, back;
 PFont cool;
 
 void setup() {
@@ -95,44 +95,16 @@ void draw() {
     textAlign(CENTER);
     textSize(48);
     text("SETTINGS", 500, 100);
+    textAlign(LEFT);
     textSize(32);
-    text("Sound", 500, 500);
+    text("Sound", 100, 500);
     noFill();
-    rect(rx1, ry4, rw4, rh1);
-    fill(c);
-    text("How To Play", 500, 600);
+    text("How To Play", 100, 600);
     noFill();
-    rect(rx2, ry5, rw5, rh1);
-    fill(r);
-    text("About The Creators", 500, 700);
+    text("About The Creators", 100, 700);
     noFill();
-    rect(rx3, ry6, rw6, rh1);
-    fill(d);
     dreams = loadImage("DnN.png");
     image(dreams, 375, 175, 250, 250);
+    back = loadImage("BACK.png");
+    image(back, 50,50,50,50);
   }
-  if (mouseX>=rx1&& mouseX<=rx1+rw4&& mouseY>=ry4 && mouseY<=ry4+rh1) {
-    c=255;
-    if (mousePressed) {
-      stage=2;
-    }
-  } else {
-    c=50;
-  }
-  if (mouseX>=rx1&& mouseX<=rx1+rw5&& mouseY>=ry5 && mouseY<=ry5+rh1) {
-    r=255;
-    if (mousePressed) {
-      stage=3;
-    }
-  } else {
-    r=50;
-  }
-  if (mouseX>=rx1&& mouseX<=rx1+rw6&& mouseY>=ry6 && mouseY<=ry6+rh1) {
-    d=255;
-    if (mousePressed) {
-      stage=4;
-    }
-  } else {
-    d=50;
-  }
-}

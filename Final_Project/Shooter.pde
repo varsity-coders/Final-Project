@@ -38,5 +38,5 @@ class Shooter {
   void update() {
     loc.set(x,y);
   }
-
+}
 }
