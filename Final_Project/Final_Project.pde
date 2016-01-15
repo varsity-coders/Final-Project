@@ -9,10 +9,10 @@ void setup() {
   vy = 5;
   stage=1;
   rh=50;
-  rw1=146;
-  rw2=138;
-  rw3=137;
-  rx=450;
+  rw1=990;
+  rw2=990;
+  rw3=990;
+  rx=5;
   ry1=495;
   ry2=595;
   ry3=695;
@@ -31,7 +31,7 @@ void draw() {
     textSize(24);
     noFill();
     stroke(255);
-    strokeWeight(1);
+    strokeWeight(2);
     rect(rx, ry1, rw1, rh);
     fill(c);
     text("CAMPAIGN", 450, 525);
