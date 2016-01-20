@@ -8,9 +8,9 @@ class Shooter {
   float fr;  //gun firerate
 
   /*l1 = 5;
-  l2 = 10;
-  h1 = 10;
-  h2 = 5;*/
+   l2 = 10;
+   h1 = 10;
+   h2 = 5;*/
 
 
 
@@ -34,8 +34,8 @@ class Shooter {
     rect(x, y-h1, l1, h1);
     rect(x, y-h1, l2, h2);
   }
-  
+
   void update() {
-    loc.set(x,y);
+    loc.set(x, y);
   }
 }
