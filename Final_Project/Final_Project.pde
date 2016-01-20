@@ -3,7 +3,9 @@
 
 float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d;
 
-PImage zig;
+
+PImage zig, dreams, back;
+
 PFont cool;
 
 void setup() {
@@ -81,6 +83,22 @@ void draw() {
     background(random(255), random(255), random(255));
   }
   if (stage==4) {
-    background(255, 0, 0);
+
+    background(0);
+    textAlign(CENTER);
+    textSize(48);
+    text("SETTINGS", 500, 100);
+    textAlign(LEFT);
+    textSize(32);
+    text("Sound", 100, 500);
+    noFill();
+    text("How To Play", 100, 600);
+    noFill();
+    text("About The Creators", 100, 700);
+    noFill();
+    dreams = loadImage("DnN.png");
+    image(dreams, 375, 175, 250, 250);
+    back = loadImage("BACK.png");
+    image(back, 50, 50, 50, 50);
   }
 }
