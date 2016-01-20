@@ -1,9 +1,11 @@
 
 //Shooter gun1;
 
-float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d, rw4, rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3;
+float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d;
+
 
 PImage zig, dreams, back;
+
 PFont cool;
 
 void setup() {
@@ -15,23 +17,13 @@ void setup() {
   vy = 5;
   stage=1;
   rh=50;
-  rw1=146;
-  rw2=138;
-  rw3=137;
-  rx=450;
-  rx1=443;
-  rx2=385;
-  rx3=315;
+  rw1=990;
+  rw2=990;
+  rw3=990;
+  rx=5;
   ry1=495;
   ry2=595;
   ry3=695;
-  rw4=115;
-  rw5=225;
-  rw6=365;
-  rh1=30;
-  ry4=478;
-  ry5=578;
-  ry6=678;
 }
 
 void draw() {
@@ -47,7 +39,7 @@ void draw() {
     textSize(24);
     noFill();
     stroke(255);
-    strokeWeight(1);
+    strokeWeight(2);
     rect(rx, ry1, rw1, rh);
     fill(c);
     text("CAMPAIGN", 450, 525);
@@ -91,6 +83,7 @@ void draw() {
     background(random(255), random(255), random(255));
   }
   if (stage==4) {
+
     background(0);
     textAlign(CENTER);
     textSize(48);
@@ -106,5 +99,6 @@ void draw() {
     dreams = loadImage("DnN.png");
     image(dreams, 375, 175, 250, 250);
     back = loadImage("BACK.png");
-    image(back, 50,50,50,50);
+    image(back, 50, 50, 50, 50);
   }
+}
