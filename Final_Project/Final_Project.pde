@@ -1,4 +1,8 @@
+
+//Shooter gun1;
+
 float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d;
+
 PImage zig;
 PFont cool;
 
@@ -6,6 +10,7 @@ void setup() {
   size(1000, 800);
   x = width/2;
   y = height/2;
+
   vy = 5;
   vy = 5;
   stage=1;
