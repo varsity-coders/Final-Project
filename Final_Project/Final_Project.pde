@@ -1,7 +1,7 @@
 
 //Shooter gun1;
 
-float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d, rw4, rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3, rx4, ry7, rh2, rw7, rx5, ry8, rh3, rw8, rx6, ry9, rh4, rw9;
+float w, x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d, rw4, rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3, rx4, ry7, rh2, rw7, rx5, ry8, rh3, rw8, rx6, ry9, rh4, rw9;
 
 PImage zig, dreams, back;
 PFont cool;
@@ -10,7 +10,7 @@ void setup() {
   size(1000, 800);
   x = width/2;
   y = height/2;
-
+  w = 0;
   vy = 5;
   vy = 5;
   stage=1;
@@ -36,14 +36,14 @@ void setup() {
   ry7=50;
   rh2=50;
   rw7=50;
-  rx5=625;
+  rx5=600;
   ry8=475;
   rh3=35;
-  rw8=57;
-  rx6=400;
+  rw8=103;
+  rx6=375;
   ry9=475;
   rh4=35;
-  rw9=43;
+  rw9=87;
 }
 
 void draw() {
@@ -74,7 +74,7 @@ void draw() {
     if (mouseX>=rx && mouseX<=rx+rw1 && mouseY>=ry1 && mouseY<=ry1+rh) {
       c=255;
       if (mousePressed) {
-        stage=2;
+        stage=1.5;
       }
     } else {
       c=50;
@@ -96,10 +96,40 @@ void draw() {
       d=50;
     }
   }
-  if (stage==2) {
-    background(255);
-    back = loadImage("BACK.png");
-    image(back, 50, 50, 50, 50);
+  if (stage==1.5) {
+    background(0);
+    fill(0);
+    textSize(64);
+    fill(255);
+    textAlign(CENTER);
+String s= "So, you have been diagnosed with a rare sleeping disorder. The doctors do not know what to do. You will be faced with this problem forever, unless you fight the Dreams and Nightmares. Put an end to your never-ending nightmares and the dreams as well to ensure the nightmares never come back.";
+text(s, 20,20,980,780);
+textSize(32);
+fill(w);
+text("PRESS THE MOUSE TO PLAY", 500,700);
+if(millis()>= 5000){
+  w=255;
+}
+if(millis()>= 5000){
+  w=255;
+}
+if(millis()>= 6000){
+  w=0;
+}
+if(millis()>= 6500){
+  w=255;
+}
+if(millis()>= 8000){
+  w=0;
+}
+if(millis()>= 8500){
+  w=255;
+}
+if(keyPressed){
+  if(key== ' '){
+  stage = 2;
+  }
+  }
   }
   if (stage==3) {
     background(random(255), random(255), random(255));
@@ -131,8 +161,13 @@ void draw() {
     noFill();
     rect(rx4, ry7, rw7, rh2);
     back = loadImage("BACK.png");
-    image(back, 50, 50, 50, 50);
+    image(back, 50, 50, 53, 53);
   }
+      if (mouseX>=rx4 && mouseX<=rx4+rw7 && mouseY>=ry7 && mouseY<=ry7+rh2) {
+      if (mousePressed) {
+        stage=1;
+      }
+      }
   if (mouseX>=rx6 && mouseX<=rx6+rw9 && mouseY>=ry9 && mouseY<=ry9+rh4) {//this is the ON hitbox
     
   }
