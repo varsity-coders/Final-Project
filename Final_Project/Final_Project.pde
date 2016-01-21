@@ -1,86 +1,146 @@
-
-//Shooter gun1;
-
-float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, r, d;
-
-PImage zig;
-PFont cool;
-
+Sprite player;
+Map map;
+Save save;
+Enemy enemy;
+Levels level;
+Over gameover;
+Shooter gun;
+float l = 0;
+float r = 0;
+float down = 0;
+float up = 0;
+float grav = .5;
+float floor = 700;
+float speedStat = 2;
 void setup() {
   size(1000, 800);
-  x = width/2;
-  y = height/2;
-
-  vy = 5;
-  vy = 5;
-  stage=1;
-  rh=50;
-  rw1=990;
-  rw2=990;
-  rw3=990;
-  rx=5;
-  ry1=495;
-  ry2=595;
-  ry3=695;
+  enemy = new Enemy();
+  player = new Sprite();
+  map = new Map();
+  save = new Save();
+  level = new Levels();
+  gameover = new Over();
+  gun = new Shooter(255, player.per.x, player.per.y, 1, 1, 5);
 }
 
 void draw() {
-  if (stage==1) {    
-    cool = loadFont("BankGothicBT-Medium-48.vlw");
-    zig = loadImage("ZIG.png");
-    background(0);
-    image(zig, 0, 150, 1000, 300);
-    textFont(cool);
-    textSize(64);
-    fill(255);
-    text("DREAMS AND NIGHTMARES", 0, 100);
-    textSize(24);
-    noFill();
-    stroke(255);
-    strokeWeight(2);
-    rect(rx, ry1, rw1, rh);
-    fill(c);
-    text("CAMPAIGN", 450, 525);
-    noFill();
-    rect(rx, ry2, rw2, rh);
-    fill(r);
-    text("SURVIVAL", 450, 625);
-    noFill();
-    rect(rx, ry3, rw3, rh);
-    fill(d);
-    text("SETTINGS", 450, 725);
-    if (mouseX>=rx && mouseX<=rx+rw1 && mouseY>=ry1 && mouseY<=ry1+rh) {
-      c=255;
-      if (mousePressed) {
-        stage=2;
-      }
-    } else {
-      c=50;
-    }
-    if (mouseX>=rx && mouseX<=rx+rw2 && mouseY>=ry2 && mouseY<=ry2+rh) {
-      r=255;
-      if (mousePressed) {
-        stage=3;
-      }
-    } else {
-      r=50;
-    }
-    if (mouseX>=rx && mouseX<=rx+rw3 && mouseY>=ry3 && mouseY<=ry3+rh) {
-      d=255;
-      if (mousePressed) {
-        stage=4;
-      }
-    } else {
-      d=50;
+  background(100);
+  //player.display();
+  map.display();
+  save.savegame();
+  enemy.displaystg1lvl1();
+  enemy.isInContactEnemy(player);
+  level.display();
+  player.health();
+  level.levelup();
+  enemy.enemydissapear();
+  player.loselife();
+  if (player.lives == 0) {
+    gameover.display();
+  }
+  if (save.saving == 1) {
+    if (mouseX > save.x && mouseY > save.y && mouseX < save.x+save.r && mouseY < save.y+save.h) {
+      save.mouseReleased();
     }
   }
-  if (stage==2) {
-    background(255);
+  if (player.per.y >= map.y-map.h && player.per.x < map.w) {
+    player.vel.y = 0;
   }
-  if (stage==3) {
-    background(random(255), random(255), random(255));
+  if (player.per.x-30>= width) {
+    background(0, 0, 255);
+    save.savegame();
+    player.per.x = 0;
   }
-  if (stage==4) {
-    background(255, 0, 0);
+  if (player.per.x-30<= 0) {
+    player.per.x = 35;
   }
+  player.vel.x = player.sp * (l + r);
+  player.per.add(player.vel);
+  if (player.per.y < floor) {
+    player.vel.y += grav;
+  } else {
+    player.vel.y = 0;
+  }
+  if (player.per.y >= floor && up != 0) {
+    player.vel.y = -player.ysp;
+  }
+  player.frameTime += .25; 
+  if (player.frameTime >= 8) { 
+    player.frameTime = 1;
+  }
+  player.frameColumn = (int)player.frameTime;
+
+  if (player.vel.x == 0 && player.vel.y == 0) {
+    player.frameColumn = 0;
+  }
+
+  if (l != 0) {
+    player.frameRow = 0;
+  }
+  if (r != 0) {
+    player.frameRow = 1;
+  } 
+  if (level.l == 1) {
+    if (player.sp > 4 || player.sp<1) {
+      player.sp = 2;
+    }
+  }
+  if (level.l == 2) {
+    speedStat = 4;
+    if (player.sp > 8 || player.sp<1) {
+      player.sp = 2;  //add other levels to game
+    }
+  }
+  pushMatrix();
+  translate(player.per.x, player.per.y);
+  imageMode(CENTER);
+
+  PImage frameImage = getSubImage(player.image, player.frameRow, player.frameColumn, 100, 105);
+
+  // Draw this image instead of player.image
+  image(frameImage, 0, 0);
+
+  popMatrix();
+}
+// Our function to return a new smaller crop from the spritesheet.
+PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
+  return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
+}
+
+void keyPressed() {
+  if (keyCode == RIGHT) {
+    r = 1;
+  }
+  if (keyCode == LEFT) {
+    l = -1;
+  }
+  if (keyCode == UP) {
+    up = -1;
+  }
+  if (key == 'z') {
+    player.sp += speedStat;
+  }
+}
+
+void keyReleased() {
+  if (keyCode == RIGHT) {
+    r = 0;
+    player.frameTime = 1;
+  }
+  if (keyCode == LEFT) {
+    l = 0;
+  }
+  if (keyCode == UP) {
+    up = 0;
+  }
+  if (key == 'z') {
+    player.sp -= speedStat;
+  }
+} 
+
+void mousePressed() {
+  gun.shoot();
+}
+void mouseReleased() {
+  gun.display();
 }
