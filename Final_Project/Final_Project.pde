@@ -4,6 +4,7 @@ Save save;
 Enemy enemy;
 Levels level;
 Over gameover;
+Shooter gun;
 float l = 0;
 float r = 0;
 float down = 0;
@@ -19,6 +20,7 @@ void setup() {
   save = new Save();
   level = new Levels();
   gameover = new Over();
+  gun = new Shooter(255, player.per.x, player.per.y, 1, 1, 5);
 }
 
 void draw() {
@@ -49,7 +51,7 @@ void draw() {
     save.savegame();
     player.per.x = 0;
   }
-    if (player.per.x-30<= 0) {
+  if (player.per.x-30<= 0) {
     player.per.x = 35;
   }
   player.vel.x = player.sp * (l + r);
@@ -135,3 +137,10 @@ void keyReleased() {
     player.sp -= speedStat;
   }
 } 
+
+void mousePressed() {
+  gun.shoot();
+}
+void mouseReleased() {
+  gun.display();
+}

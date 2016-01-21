@@ -15,15 +15,20 @@ class Shooter {
     bSpeed = bs;
     fr = nFr;
     loc = new PVector(x, y);
+    vel = new PVector(5,0);
   }
 
   void display() {
     fill(c);
     stroke(c);
-    ellipse(x,y,5,5);
+    ellipse(loc.x, loc.y, diam, diam);
   }
 
   void update() {
     loc.set(x, y);
+  }
+  void shoot() {
+    ellipse(loc.x,loc.y,diam,diam);
+    loc.add(vel);
   }
 }
