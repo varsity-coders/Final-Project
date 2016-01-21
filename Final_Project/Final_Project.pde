@@ -2,29 +2,23 @@ Sprite player;
 Map map;
 Save save;
 Enemy enemy;
-
+Levels level;
+Over gameover;
 float l = 0;
 float r = 0;
 float down = 0;
 float up = 0;
 float grav = .5;
-float floor = 750;
+float floor = 700;
 float speedStat = 2;
-float playerlevel = 1;
 void setup() {
   size(1000, 800);
-    enemy = new Enemy();
+  enemy = new Enemy();
   player = new Sprite();
   map = new Map();
   save = new Save();
-  player.image = loadImage("sprites.png");
-  player.per = new PVector(600, floor);
-  player.vel = new PVector(0, 0);
-  player.frameRow = 0; 
-  player.frameColumn = 0; 
-  player.frameTime = 0;
-  player.sp = 2;
-  player.ysp = 13;
+  level = new Levels();
+  gameover = new Over();
 }
 
 void draw() {
@@ -32,20 +26,31 @@ void draw() {
   //player.display();
   map.display();
   save.savegame();
-  enemy.display();
+  enemy.displaystg1lvl1();
+  enemy.isInContactEnemy(player);
+  level.display();
+  player.health();
+  level.levelup();
+  enemy.enemydissapear();
+  player.loselife();
+  if (player.lives == 0) {
+    gameover.display();
+  }
   if (save.saving == 1) {
     if (mouseX > save.x && mouseY > save.y && mouseX < save.x+save.r && mouseY < save.y+save.h) {
       save.mouseReleased();
     }
   }
-  if (player.per.y >= map.y && player.per.x < map.w) {
-    player.per.y = height/2+152;
-    grav = 0;
+  if (player.per.y >= map.y-map.h && player.per.x < map.w) {
+    player.vel.y = 0;
   }
-  if (player.per.x-30>= width){
-    background(0,0,255);
+  if (player.per.x-30>= width) {
+    background(0, 0, 255);
     save.savegame();
     player.per.x = 0;
+  }
+    if (player.per.x-30<= 0) {
+    player.per.x = 35;
   }
   player.vel.x = player.sp * (l + r);
   player.per.add(player.vel);
@@ -73,12 +78,12 @@ void draw() {
   if (r != 0) {
     player.frameRow = 1;
   } 
-  if (playerlevel == 1) {
+  if (level.l == 1) {
     if (player.sp > 4 || player.sp<1) {
       player.sp = 2;
     }
   }
-  if (playerlevel == 2) {
+  if (level.l == 2) {
     speedStat = 4;
     if (player.sp > 8 || player.sp<1) {
       player.sp = 2;  //add other levels to game
