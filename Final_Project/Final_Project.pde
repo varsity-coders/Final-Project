@@ -1,47 +1,146 @@
-
-float x, y, vy, vx, a;
-Shooter gun1;
-PImage zig;
-PFont cool;
-
+Sprite player;
+Map map;
+Save save;
+Enemy enemy;
+Levels level;
+Over gameover;
+Shooter gun;
+float l = 0;
+float r = 0;
+float down = 0;
+float up = 0;
+float grav = .5;
+float floor = 700;
+float speedStat = 2;
 void setup() {
-  size(800, 600);
-  x = width/2;
-  y = height/2;
-  vx = 5;
-  vy = -5;
-  a = 1;
-  
-  gun1 = new Shooter(255, x+2, y+3, 5, 2);
+  size(1000, 800);
+  enemy = new Enemy();
+  player = new Sprite();
+  map = new Map();
+  save = new Save();
+  level = new Levels();
+  gameover = new Over();
+  gun = new Shooter(255, player.per.x, player.per.y, 1, 1, 5);
 }
 
 void draw() {
-  cool = loadFont("BankGothicBT-Medium-48.vlw");
-  zig = loadImage("ZIG.png");
-  background(0);
-
-  fill(random(255), random(255), random(255));
-  ellipse(x, y, 10, 10);
-  if (keyPressed) {
-    if (keyCode == RIGHT) {
-      x+=vx;
-    }
-    if (keyCode == LEFT) {
-      x+=-vx;
+  background(100);
+  //player.display();
+  map.display();
+  save.savegame();
+  enemy.displaystg1lvl1();
+  enemy.isInContactEnemy(player);
+  level.display();
+  player.health();
+  level.levelup();
+  enemy.enemydissapear();
+  player.loselife();
+  if (player.lives == 0) {
+    gameover.display();
+  }
+  if (save.saving == 1) {
+    if (mouseX > save.x && mouseY > save.y && mouseX < save.x+save.r && mouseY < save.y+save.h) {
+      save.mouseReleased();
     }
   }
-  
-  gun1.display();
-  gun1.update();
+  if (player.per.y >= map.y-map.h && player.per.x < map.w) {
+    player.vel.y = 0;
+  }
+  if (player.per.x-30>= width) {
+    background(0, 0, 255);
+    save.savegame();
+    player.per.x = 0;
+  }
+  if (player.per.x-30<= 0) {
+    player.per.x = 35;
+  }
+  player.vel.x = player.sp * (l + r);
+  player.per.add(player.vel);
+  if (player.per.y < floor) {
+    player.vel.y += grav;
+  } else {
+    player.vel.y = 0;
+  }
+  if (player.per.y >= floor && up != 0) {
+    player.vel.y = -player.ysp;
+  }
+  player.frameTime += .25; 
+  if (player.frameTime >= 8) { 
+    player.frameTime = 1;
+  }
+  player.frameColumn = (int)player.frameTime;
 
-  image(zig, 0, 100, 1000, 250);
-  textFont(cool);
-  textSize(64);
-  text("DREAMS AND NIGHTMARES", 0, 75);
-  textSize(24);
-  text("CAMPAIGN", 350, 400);
-  text("SURVIVAL", 350, 500);
-  text("SETTINGS", 350, 600);
-  fill(255);
+  if (player.vel.x == 0 && player.vel.y == 0) {
+    player.frameColumn = 0;
+  }
 
+  if (l != 0) {
+    player.frameRow = 0;
+  }
+  if (r != 0) {
+    player.frameRow = 1;
+  } 
+  if (level.l == 1) {
+    if (player.sp > 4 || player.sp<1) {
+      player.sp = 2;
+    }
+  }
+  if (level.l == 2) {
+    speedStat = 4;
+    if (player.sp > 8 || player.sp<1) {
+      player.sp = 2;  //add other levels to game
+    }
+  }
+  pushMatrix();
+  translate(player.per.x, player.per.y);
+  imageMode(CENTER);
+
+  PImage frameImage = getSubImage(player.image, player.frameRow, player.frameColumn, 100, 105);
+
+  // Draw this image instead of player.image
+  image(frameImage, 0, 0);
+
+  popMatrix();
+}
+// Our function to return a new smaller crop from the spritesheet.
+PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
+  return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
+}
+
+void keyPressed() {
+  if (keyCode == RIGHT) {
+    r = 1;
+  }
+  if (keyCode == LEFT) {
+    l = -1;
+  }
+  if (keyCode == UP) {
+    up = -1;
+  }
+  if (key == 'z') {
+    player.sp += speedStat;
+  }
+}
+
+void keyReleased() {
+  if (keyCode == RIGHT) {
+    r = 0;
+    player.frameTime = 1;
+  }
+  if (keyCode == LEFT) {
+    l = 0;
+  }
+  if (keyCode == UP) {
+    up = 0;
+  }
+  if (key == 'z') {
+    player.sp -= speedStat;
+  }
+} 
+
+void mousePressed() {
+  gun.shoot();
+}
+void mouseReleased() {
+  gun.display();
 }
