@@ -12,6 +12,8 @@ float up = 0;
 float grav = .5;
 float floor = 700;
 float speedStat = 2;
+float gx, gy;
+float vx;
 void setup() {
   size(1000, 800);
   enemy = new Enemy();
@@ -21,6 +23,8 @@ void setup() {
   level = new Levels();
   gameover = new Over();
   gun = new Shooter(255, player.per.x, player.per.y, 1, 1, 5);
+  gx = player.per.x;
+  gy = player.per.y;
 }
 
 void draw() {
@@ -101,6 +105,15 @@ void draw() {
   image(frameImage, 0, 0);
 
   popMatrix();
+  if (mouseX>player.per.x) {
+    vx = 5;
+  }
+  if (mouseY>player.per.y) {
+    vx = -5;
+  }
+  gun.display(gx, gy);
+  gun.update(gx, gy);
+  
 }
 // Our function to return a new smaller crop from the spritesheet.
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
@@ -138,9 +151,12 @@ void keyReleased() {
   }
 } 
 
-void mousePressed() {
-  gun.shoot();
+void mouseClicked() {
+  gx = player.per.x;
+  gy = player.per.y;
+  
 }
 void mouseReleased() {
-  gun.display();
+//gun.update(gx, gy);
+  gun.shoot(vx);
 }
