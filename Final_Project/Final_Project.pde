@@ -13,11 +13,11 @@ float grav = .5;
 float floor = 700;
 float speedStat = 2;
 float w, x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, z, d, rw4, rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3, rx4, ry7, rh2, rw7, rx5, ry8, rh3, rw8, rx6, ry9, rh4, rw9;
-PImage zig, dreams, back;
+PImage zig, dreams, back, dreamsnight;
 PFont cool;
-    PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
-      return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
-    }
+PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
+  return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
+}
 void setup() {
   size(1000, 800);
   enemy = new Enemy();
@@ -65,15 +65,20 @@ void setup() {
 }
 
 void draw() {
-  if (stage==1) {    
+  if (stage==1) {
+    dreamsnight = loadImage("dreams.jpg");
     cool = loadFont("BankGothicBT-Medium-48.vlw");
-    zig = loadImage("ZIG.png");
-    background(0);
-    image(zig, 0, 150, 1000, 300);
+    image(dreamsnight,0,0,1000,800);
     textFont(cool);
-    textSize(64);
+    textSize(100);
+    fill(0, 0, 255);
+    text("DREAMS", 250, 150);
     fill(255);
-    text("DREAMS AND NIGHTMARES", 0, 100);
+        textSize(76);
+    text("AND", 420, 275);
+    fill(255, 0, 0);
+        textSize(100);
+    text("NIGHTMARES", 120, 425);
     textSize(24);
     noFill();
     stroke(255);
@@ -100,7 +105,7 @@ void draw() {
     if (mouseX>=rx && mouseX<=rx+rw2 && mouseY>=ry2 && mouseY<=ry2+rh) {
       r=255;
       if (mousePressed) {
-        stage=3;
+        stage=2.5;
       }
     } else {
       r=50;
@@ -120,7 +125,7 @@ void draw() {
     textSize(64);
     fill(255);
     textAlign(CENTER);
-    String s= "So, you have been diagnosed with a rare sleeping disorder. The doctors do not know what to do. You will be faced with this problem forever, unless you fight the Dreams and Nightmares. Put an end to your never-ending nightmares and the dreams as well to ensure the nightmares never come back.";
+    String s= "You have been diagnosed with a rare sleeping disorder. The doctors do not know what to do. You will be faced with this problem forever, unless you conquer your Dreams. Enter the world of dreams and control your destiny.";
     text(s, 20, 20, 980, 780);
     textSize(32);
     fill(w);
@@ -150,95 +155,15 @@ void draw() {
     }
   }
   if (stage==2) {
-    map.display();
-    save.savegame();
-    enemy.displaystg1lvl1();
-    enemy.isInContactEnemy(player);
-    level.display();
-    player.health();
-    level.levelup();
-    enemy.enemydissapear();
-    player.loselife();
-    if (player.lives == 0) {
-      gameover.display();
-    }
-    if (save.saving == 1) {
-      if (mouseX > save.x && mouseY > save.y && mouseX < save.x+save.r && mouseY < save.y+save.h) {
-        save.mouseReleased();
-      }
-    }
-    if (player.per.y >= map.y-map.h && player.per.x < map.w) {
-      player.vel.y = 0;
-    }
-    if (player.per.x-30>= width) {
-      background(0, 0, 255);
-      save.savegame();
-      player.per.x = 0;
-    }
-    if (player.per.x-30<= 0) {
-      player.per.x = 35;
-    }
-    player.vel.x = player.sp * (l + r);
-    player.per.add(player.vel);
-    if (player.per.y < floor) {
-      player.vel.y += grav;
-    } else {
-      player.vel.y = 0;
-    }
-    if (player.per.y >= floor && up != 0) {
-      player.vel.y = -player.ysp;
-    }
-    player.frameTime += .25; 
-    if (player.frameTime >= 8) { 
-      player.frameTime = 1;
-    }
-    player.frameColumn = (int)player.frameTime;
-
-    if (player.vel.x == 0 && player.vel.y == 0) {
-      player.frameColumn = 0;
-    }
-
-    if (l != 0) {
-      player.frameRow = 0;
-    }
-    if (r != 0) {
-      player.frameRow = 1;
-    } 
-    if (level.l == 1) {
-      if (player.sp > 4 || player.sp<1) {
-        player.sp = 2;
-      }
-    }
-    if (level.l == 2) {
-      speedStat = 4;
-      if (player.sp > 8 || player.sp<1) {
-        player.sp = 2;  //add other levels to game
-      }
-    }
-    pushMatrix();
-    translate(player.per.x, player.per.y);
-    imageMode(CENTER);
-
-    PImage frameImage = getSubImage(player.image, player.frameRow, player.frameColumn, 100, 105);
-    PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
-    // Draw this image instead of player.image
-    if (stage ==2) {
-      image(frameImage, 0, 0);
-    }
-    if (stage == 3) {
-      image(frameImagered, 0, 0);
-    }
-    popMatrix();
-    // Our function to return a new smaller crop from the spritesheet.
-
+    campaign();
   }
-  if (stage == 2.5){
-        background(0);
+  if (stage == 2.5) {
+    background(0);
     fill(0);
     textSize(64);
     fill(255);
     textAlign(CENTER);
-    String s= "So, you have been diagnosed with a rare sleeping disorder. The doctors do not know what to do. You will be faced with this problem forever, unless you fight the Dreams and Nightmares. Put an end to your never-ending nightmares and the dreams as well to ensure the nightmares never come back.";
+    String s= "So, you have been diagnosed with a rare sleeping disorder. The doctors do not know what to do. You will be faced with this problem forever, unless you fight your Nightmares. Put an end to your never-ending nightmares to ensure the nightmares never come back.";
     text(s, 20, 20, 980, 780);
     textSize(32);
     fill(w);
@@ -268,86 +193,7 @@ void draw() {
     }
   }
   if (stage==3) {
-    map.display();
-    save.savegame();
-    enemy.displaystg1lvl1();
-    enemy.isInContactEnemy(player);
-    level.display();
-    player.health();
-    level.levelup();
-    enemy.enemydissapear();
-    player.loselife();
-    if (player.lives == 0) {
-      gameover.display();
-    }
-    if (save.saving == 1) {
-      if (mouseX > save.x && mouseY > save.y && mouseX < save.x+save.r && mouseY < save.y+save.h) {
-        save.mouseReleased();
-      }
-    }
-    if (player.per.y >= map.y-map.h && player.per.x < map.w) {
-      player.vel.y = 0;
-    }
-    if (player.per.x-30>= width) {
-      background(0, 0, 255);
-      save.savegame();
-      player.per.x = 0;
-    }
-    if (player.per.x-30<= 0) {
-      player.per.x = 35;
-    }
-    player.vel.x = player.sp * (l + r);
-    player.per.add(player.vel);
-    if (player.per.y < floor) {
-      player.vel.y += grav;
-    } else {
-      player.vel.y = 0;
-    }
-    if (player.per.y >= floor && up != 0) {
-      player.vel.y = -player.ysp;
-    }
-    player.frameTime += .25; 
-    if (player.frameTime >= 8) { 
-      player.frameTime = 1;
-    }
-    player.frameColumn = (int)player.frameTime;
-
-    if (player.vel.x == 0 && player.vel.y == 0) {
-      player.frameColumn = 0;
-    }
-
-    if (l != 0) {
-      player.frameRow = 0;
-    }
-    if (r != 0) {
-      player.frameRow = 1;
-    } 
-    if (level.l == 1) {
-      if (player.sp > 4 || player.sp<1) {
-        player.sp = 2;
-      }
-    }
-    if (level.l == 2) {
-      speedStat = 4;
-      if (player.sp > 8 || player.sp<1) {
-        player.sp = 2;  //add other levels to game
-      }
-    }
-    pushMatrix();
-    translate(player.per.x, player.per.y);
-    imageMode(CENTER);
-
-    PImage frameImage = getSubImage(player.image, player.frameRow, player.frameColumn, 100, 105);
-    PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
-    // Draw this image instead of player.image
-    if (stage ==2) {
-      image(frameImage, 0, 0);
-    }
-    if (stage == 3) {
-      image(frameImagered, 0, 0);
-    }
-    popMatrix();
-    // Our function to return a new smaller crop from the spritesheet.
+    survival();
   }
   if (stage==4) {
     background(0);
@@ -386,33 +232,185 @@ void draw() {
   if (mouseX>=rx5 && mouseX<=rx5+rw8 && mouseY>=ry8 && mouseY<=ry8+rh3) {//this is the OFF hitbox
   }
 }
-  void keyPressed() {
-    if (keyCode == RIGHT) {
-      r = 1;
-    }
-    if (keyCode == LEFT) {
-      l = -1;
-    }
-    if (keyCode == UP) {
-      up = -1;
-    }
-    if (key == 'z') {
-      player.sp += speedStat;
+void keyPressed() {
+  if (keyCode == RIGHT) {
+    r = 1;
+  }
+  if (keyCode == LEFT) {
+    l = -1;
+  }
+  if (keyCode == UP) {
+    up = -1;
+  }
+  if (key == 'z') {
+    player.sp += speedStat;
+  }
+}
+
+void keyReleased() {
+  if (keyCode == RIGHT) {
+    r = 0;
+    player.frameTime = 1;
+  }
+  if (keyCode == LEFT) {
+    l = 0;
+  }
+  if (keyCode == UP) {
+    up = 0;
+  }
+  if (key == 'z') {
+    player.sp -= speedStat;
+  }
+} 
+void campaign() {
+  map.display();
+  save.savegame();
+  enemy.displaystg1lvl1();
+  enemy.isInContactEnemy(player);
+  level.display();
+  player.health();
+  level.levelup();
+  enemy.enemydissapear();
+  player.loselife();
+  if (player.lives == 0) {
+    gameover.display();
+  }
+  if (save.saving == 1) {
+    if (mouseX > save.x && mouseY > save.y && mouseX < save.x+save.r && mouseY < save.y+save.h) {
+      save.mouseReleased();
     }
   }
+  if (player.per.y >= map.y-map.h && player.per.x < map.w) {
+    player.vel.y = 0;
+  }
+  if (player.per.x-30>= width) {
+    background(0, 0, 255);
+    save.savegame();
+    player.per.x = 0;
+  }
+  if (player.per.x-30<= 0) {
+    player.per.x = 35;
+  }
+  player.vel.x = player.sp * (l + r);
+  player.per.add(player.vel);
+  if (player.per.y < floor) {
+    player.vel.y += grav;
+  } else {
+    player.vel.y = 0;
+  }
+  if (player.per.y >= floor && up != 0) {
+    player.vel.y = -player.ysp;
+  }
+  player.frameTime += .25; 
+  if (player.frameTime >= 8) { 
+    player.frameTime = 1;
+  }
+  player.frameColumn = (int)player.frameTime;
 
-  void keyReleased() {
-    if (keyCode == RIGHT) {
-      r = 0;
-      player.frameTime = 1;
-    }
-    if (keyCode == LEFT) {
-      l = 0;
-    }
-    if (keyCode == UP) {
-      up = 0;
-    }
-    if (key == 'z') {
-      player.sp -= speedStat;
-    }
+  if (player.vel.x == 0 && player.vel.y == 0) {
+    player.frameColumn = 0;
+  }
+
+  if (l != 0) {
+    player.frameRow = 0;
+  }
+  if (r != 0) {
+    player.frameRow = 1;
   } 
+  if (level.l == 1) {
+    if (player.sp > 4 || player.sp<1) {
+      player.sp = 2;
+    }
+  }
+  if (level.l == 2) {
+    speedStat = 4;
+    if (player.sp > 8 || player.sp<1) {
+      player.sp = 2;  //add other levels to game
+    }
+  }
+  pushMatrix();
+  translate(player.per.x, player.per.y);
+  imageMode(CENTER);
+
+  PImage frameImage = getSubImage(player.image, player.frameRow, player.frameColumn, 100, 105);
+  // Draw this image instead of player.image
+  image(frameImage, 0, 0);
+  popMatrix();
+  // Our function to return a new smaller crop from the spritesheet.
+}
+void survival() {
+  map.display();
+  save.savegame();
+  enemy.displaystg1lvl1();
+  enemy.isInContactEnemy(player);
+  level.display();
+  player.health();
+  level.levelup();
+  enemy.enemydissapear();
+  player.loselife();
+  if (player.lives == 0) {
+    gameover.display();
+  }
+  if (save.saving == 1) {
+    if (mouseX > save.x && mouseY > save.y && mouseX < save.x+save.r && mouseY < save.y+save.h) {
+      save.mouseReleased();
+    }
+  }
+  if (player.per.y >= map.y-map.h && player.per.x < map.w) {
+    player.vel.y = 0;
+  }
+  if (player.per.x-30>= width) {
+    background(0, 0, 255);
+    save.savegame();
+    player.per.x = 0;
+  }
+  if (player.per.x-30<= 0) {
+    player.per.x = 35;
+  }
+  player.vel.x = player.sp * (l + r);
+  player.per.add(player.vel);
+  if (player.per.y < floor) {
+    player.vel.y += grav;
+  } else {
+    player.vel.y = 0;
+  }
+  if (player.per.y >= floor && up != 0) {
+    player.vel.y = -player.ysp;
+  }
+  player.frameTime += .25; 
+  if (player.frameTime >= 8) { 
+    player.frameTime = 1;
+  }
+  player.frameColumn = (int)player.frameTime;
+
+  if (player.vel.x == 0 && player.vel.y == 0) {
+    player.frameColumn = 0;
+  }
+
+  if (l != 0) {
+    player.frameRow = 0;
+  }
+  if (r != 0) {
+    player.frameRow = 1;
+  } 
+  if (level.l == 1) {
+    if (player.sp > 4 || player.sp<1) {
+      player.sp = 2;
+    }
+  }
+  if (level.l == 2) {
+    speedStat = 4;
+    if (player.sp > 8 || player.sp<1) {
+      player.sp = 2;  //add other levels to game
+    }
+  }
+  pushMatrix();
+  translate(player.per.x, player.per.y);
+  imageMode(CENTER);
+
+  PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
+  // Draw this image instead of player.image
+  image(frameImagered, 0, 0);
+  popMatrix();
+  // Our function to return a new smaller crop from the spritesheet.
+}
