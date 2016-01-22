@@ -1,5 +1,6 @@
 class Sprite {
   PImage image;
+  PImage imagered;
   PImage life;
   PVector per;
   int frameRow;
@@ -15,6 +16,7 @@ class Sprite {
 
   Sprite() {
     image = loadImage("sprites.png");
+    imagered = loadImage("spritesred.png");
     life = loadImage("lives.png");
     per = new PVector(150, 100);
     vel = new PVector(0, 0);

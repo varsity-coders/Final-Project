@@ -11,6 +11,7 @@ float up = 0;
 float grav = .5;
 float floor = 700;
 float speedStat = 2;
+float stage = 1;
 void setup() {
   size(1000, 800);
   enemy = new Enemy();
@@ -94,15 +95,20 @@ void draw() {
   imageMode(CENTER);
 
   PImage frameImage = getSubImage(player.image, player.frameRow, player.frameColumn, 100, 105);
-
+PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
   // Draw this image instead of player.image
+  if (stage ==1){
   image(frameImage, 0, 0);
-
+  }
+  if (stage == 2){
+image(frameImagered, 0, 0);
+  }
   popMatrix();
 }
 // Our function to return a new smaller crop from the spritesheet.
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
+
 }
 
 void keyPressed() {
