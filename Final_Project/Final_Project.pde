@@ -106,7 +106,7 @@ String s= "So, you have been diagnosed with a rare sleeping disorder. The doctor
 text(s, 20,20,980,780);
 textSize(32);
 fill(w);
-text("PRESS THE MOUSE TO PLAY", 500,700);
+text("PRESS SPACE TO PLAY", 500,700);
 if(millis()>= 5000){
   w=255;
 }
@@ -130,6 +130,9 @@ if(keyPressed){
   stage = 2;
   }
   }
+  }
+  if (stage==2){
+    background(134,234,235);
   }
   if (stage==3) {
     background(random(255), random(255), random(255));
