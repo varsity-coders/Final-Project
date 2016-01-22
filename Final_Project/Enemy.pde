@@ -6,7 +6,7 @@ class Enemy {
   PVector x3, y3, picvel3;
   Enemy() {
     image  = loadImage("enemy.png");
-    imagered = loadImage("enemyred");
+    imagered = loadImage("enemyred.png");
     blast = loadImage("blast.png");
     x = new PVector(random(30, width-30), 0);
     x2 = new PVector(random(30, width-30), 0);

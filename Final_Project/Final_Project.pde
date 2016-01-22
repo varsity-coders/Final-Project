@@ -1,6 +1,5 @@
 Sprite player;
 Map map;
-Save save;
 Enemy enemy;
 Levels level;
 Over gameover;
@@ -13,8 +12,9 @@ float grav = .5;
 float floor = 700;
 float speedStat = 2;
 float w, x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, z, d, rw4, rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3, rx4, ry7, rh2, rw7, rx5, ry8, rh3, rw8, rx6, ry9, rh4, rw9;
-PImage zig, dreams, back, dreamsnight;
+PImage zig, dreams, back, dreamsnight, load;
 PFont cool;
+float loadx, loadw;
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
 }
@@ -23,11 +23,12 @@ void setup() {
   enemy = new Enemy();
   player = new Sprite();
   map = new Map();
-  save = new Save();
   level = new Levels();
   gameover = new Over();
   x = width/2;
   y = height/2;
+  loadx = 0;
+  loadw = 10;
   w = 0;
   vy = 5;
   vy = 5;
@@ -65,19 +66,52 @@ void setup() {
 }
 
 void draw() {
-  if (stage==1) {
+  if (stage == 1) {
+          cool = loadFont("BankGothicBT-Medium-48.vlw");
+          font(cool);
+    load = loadImage("loading.png");
+    image(load, 0, 0, 1000, 800);
+    fill(255);
+    rect(loadx, 770, loadw, 30);
+    loadw+=(random(1, 25));
+    textSize(48);
+    if (millis()<1250) {
+      text("Yawning", width/2, 700);
+    }
+    if (millis()>1250 && millis()<2500) {
+      text("Getting Drowzy", width/2, 700);
+    }
+    if (millis() >2500 && millis()<3750) {
+      text("Laying Head Down", width/2, 700);
+    }
+    if (millis() >3750 && millis()<5000) {
+      text("Falling Asleep", width/2, 700);
+    }
+    if (millis() >5000 && millis()<6250) {
+      text("Knocked Out", width/2, 700);
+    }
+    if (millis() >6250) {
+      text("Entering Dreams...", width/2, 700);
+    }
+    if (loadw > width+50) {
+      stage = 1.5;
+    }
+  }
+  if (stage == 1.5) {
+    
+  }
+  if (stage==2) {
     dreamsnight = loadImage("dreams.jpg");
-    cool = loadFont("BankGothicBT-Medium-48.vlw");
-    image(dreamsnight,0,0,1000,800);
+    image(dreamsnight, 0, 0, 1000, 800);
     textFont(cool);
     textSize(100);
     fill(0, 0, 255);
     text("DREAMS", 250, 150);
     fill(255);
-        textSize(76);
+    textSize(76);
     text("AND", 420, 275);
     fill(255, 0, 0);
-        textSize(100);
+    textSize(100);
     text("NIGHTMARES", 120, 425);
     textSize(24);
     noFill();
@@ -264,7 +298,6 @@ void keyReleased() {
 } 
 void campaign() {
   map.display();
-  save.savegame();
   enemy.displaystg1lvl1();
   enemy.isInContactEnemy(player);
   level.display();
@@ -275,17 +308,12 @@ void campaign() {
   if (player.lives == 0) {
     gameover.display();
   }
-  if (save.saving == 1) {
-    if (mouseX > save.x && mouseY > save.y && mouseX < save.x+save.r && mouseY < save.y+save.h) {
-      save.mouseReleased();
-    }
-  }
+
   if (player.per.y >= map.y-map.h && player.per.x < map.w) {
     player.vel.y = 0;
   }
   if (player.per.x-30>= width) {
     background(0, 0, 255);
-    save.savegame();
     player.per.x = 0;
   }
   if (player.per.x-30<= 0) {
@@ -340,7 +368,6 @@ void campaign() {
 }
 void survival() {
   map.display();
-  save.savegame();
   enemy.displaystg1lvl1();
   enemy.isInContactEnemy(player);
   level.display();
@@ -351,17 +378,11 @@ void survival() {
   if (player.lives == 0) {
     gameover.display();
   }
-  if (save.saving == 1) {
-    if (mouseX > save.x && mouseY > save.y && mouseX < save.x+save.r && mouseY < save.y+save.h) {
-      save.mouseReleased();
-    }
-  }
   if (player.per.y >= map.y-map.h && player.per.x < map.w) {
     player.vel.y = 0;
   }
   if (player.per.x-30>= width) {
     background(0, 0, 255);
-    save.savegame();
     player.per.x = 0;
   }
   if (player.per.x-30<= 0) {
