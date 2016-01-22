@@ -58,29 +58,6 @@ op5 = 255,op6 = 255,op7 = 255,op8 = 255,op9 = 255;
     text("Leveled Up", 700, height - 50);
     op5-=2;
   }
-          if (l==7) {
-    fill(255, 255, 255, op6);
-    textSize(16);
-    text("Leveled Up", 700, height - 50);
-    op6-=2;
-  }
-          if (l==8) {
-    fill(255, 255, 255, op7);
-    textSize(16);
-    text("Leveled Up", 700, height - 50);
-    op7-=2;
-  }
-          if (l==9) {
-    fill(255, 255, 255, op8);
-    textSize(16);
-    text("Leveled Up", 700, height - 50);
-    op8-=2;
-  }
-            if (l==10) {
-    fill(255, 255, 255, op9);
-    textSize(16);
-    text("Max Level", 700, height - 50);
-    op9-=2;
-  }
+  
     }
 }

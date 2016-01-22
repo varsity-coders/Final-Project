@@ -80,7 +80,7 @@ void draw() {
   if (r != 0) {
     player.frameRow = 1;
   } 
-  if (level.l == 1) {
+ if (level.l == 1) {
     if (player.sp > 4 || player.sp<1) {
       player.sp = 2;
     }
@@ -91,6 +91,32 @@ void draw() {
       player.sp = 2;  //add other levels to game
     }
   }
+  if (level.l == 3) {
+    speedStat = 6;
+    if (player.sp > 10 || player.sp<1){
+     player.sp = 2;
+
+    }
+}
+   if (level.l == 4) {
+     speedStat = 8;
+    if (player.sp > 12 || player.sp<1){
+          player.sp = 2;
+   }
+  }
+  if (level.l == 5) {
+              speedStat = 10;
+    if (player.sp > 14 || player.sp<1){
+    player.sp = 2;
+  }
+  }
+   if (level.l == 6) {
+     speedStat = 12;
+    if (player.sp > 16 || player.sp<1){  
+       player.sp = 2;
+
+    }
+   }
   pushMatrix();
   translate(player.per.x, player.per.y);
   imageMode(CENTER);
