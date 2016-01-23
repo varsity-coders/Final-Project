@@ -1,9 +1,29 @@
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
+
 Sprite player;
 Map map;
 Enemy enemy;
 Levels level;
 Over gameover;
+Pause pause;
 
+Minim minim;
+
+AudioPlayer full;
+AudioPlayer dream;
+AudioPlayer night;
+AudioPlayer rollover;
+AudioPlayer rollover1;
+AudioPlayer rollover2;
+AudioPlayer loadscreen;
+
+float fill = 255;
 float l = 0;
 float r = 0;
 float down = 0;
@@ -12,9 +32,9 @@ float grav = .5;
 float floor = 700;
 float speedStat = 2;
 float w, x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, z, d, rw4, rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3, rx4, ry7, rh2, rw7, rx5, ry8, rh3, rw8, rx6, ry9, rh4, rw9;
-PImage zig, dreams, back, dreamsnight, load;
+PImage zig, dreams, back, load, yontroller, campaignbackground;
 PFont cool;
-float loadx, loadw;
+float loadx, loadw, pausegame = 0;
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
 }
@@ -25,6 +45,7 @@ void setup() {
   map = new Map();
   level = new Levels();
   gameover = new Over();
+  pause = new Pause();
   x = width/2;
   y = height/2;
   loadx = 0;
@@ -63,18 +84,28 @@ void setup() {
   ry9=475;
   rh4=35;
   rw9=87;
+  minim = new Minim(this); //minim audio import
+  full = minim.loadFile("FULL.mp3");
+  dream = minim.loadFile("DREAMS.mp3");
+  night = minim.loadFile("NIGHTMARES.mp3");
+  rollover = minim.loadFile("rollover.mp3");
+  rollover1 = minim.loadFile("rollover.mp3");
+  rollover2 = minim.loadFile("rollover.mp3");
+  //loadscreen
 }
 
 void draw() {
+  cool = loadFont("BankGothicBT-Medium-48.vlw");
+  textFont(cool);
   if (stage == 1) {
-          cool = loadFont("BankGothicBT-Medium-48.vlw");
-          font(cool);
     load = loadImage("loading.png");
     image(load, 0, 0, 1000, 800);
     fill(255);
     rect(loadx, 770, loadw, 30);
     loadw+=(random(1, 25));
+    fill(200);
     textSize(48);
+    textAlign(CENTER);
     if (millis()<1250) {
       text("Yawning", width/2, 700);
     }
@@ -93,16 +124,32 @@ void draw() {
     if (millis() >6250) {
       text("Entering Dreams...", width/2, 700);
     }
-    if (loadw > width+50) {
+    if (loadw > 1100) {
       stage = 1.5;
     }
   }
   if (stage == 1.5) {
-    
+    yontroller = loadImage("yontroller.jpg");
+    background(0);
+    fill(fill);
+    if (millis() > 12000) {
+      fill-=4;
+      tint(255, fill);
+    }
+    textSize(56);
+    text("Varsity-Coders Present", width/2, 350);
+    imageMode(CENTER);
+    image(yontroller, width/2, 500);
+    if (fill < -225) {
+      stage = 2;
+      full.play();
+      full.loop();
+    }
   }
+
   if (stage==2) {
-    dreamsnight = loadImage("dreams.jpg");
-    image(dreamsnight, 0, 0, 1000, 800);
+    //dreamsnight = loadImage("dreams.jpg");
+    //image(dreamsnight, 0, 0, 1000, 800);
     textFont(cool);
     textSize(100);
     fill(0, 0, 255);
@@ -130,30 +177,37 @@ void draw() {
     text("SETTINGS", 450, 725);
     if (mouseX>=rx && mouseX<=rx+rw1 && mouseY>=ry1 && mouseY<=ry1+rh) {
       c=255;
-      if (mousePressed) {
-        stage=1.5;
-      }
-    } else {
-      c=50;
-    }
-    if (mouseX>=rx && mouseX<=rx+rw2 && mouseY>=ry2 && mouseY<=ry2+rh) {
-      r=255;
+      rollover.play();
       if (mousePressed) {
         stage=2.5;
       }
     } else {
+      c=50;
+                  rollover.rewind();
+    }
+    if (mouseX>=rx && mouseX<=rx+rw2 && mouseY>=ry2 && mouseY<=ry2+rh) {
+      r=255;
+      rollover1.play();
+      if (mousePressed) {
+        stage=3.5;
+      }
+    } else {
       r=50;
+      rollover1.rewind();
     }
     if (mouseX>=rx && mouseX<=rx+rw3 && mouseY>=ry3 && mouseY<=ry3+rh) {
       d=255;
+      rollover2.play();
       if (mousePressed) {
-        stage=4;
+        stage=5;
       }
     } else {
       d=50;
+            rollover2.rewind();
     }
   }
-  if (stage==1.5) {
+  if (stage==2.5) {
+        full.pause();
     background(0);
     fill(0);
     textSize(64);
@@ -184,14 +238,18 @@ void draw() {
     }
     if (keyPressed) {
       if (key== ' ') {
-        stage = 2;
+        if (pausegame == 0) {
+              dream.play();
+          stage = 3;
+        }
       }
     }
   }
-  if (stage==2) {
+  if (stage==3) {
     campaign();
   }
-  if (stage == 2.5) {
+  if (stage == 3.5) {
+     full.pause();
     background(0);
     fill(0);
     textSize(64);
@@ -222,17 +280,24 @@ void draw() {
     }
     if (keyPressed) {
       if (key== ' ') {
-        stage = 3;
+        stage = 4;
       }
     }
   }
-  if (stage==3) {
+  if (stage==4) {
+    night.play();
     survival();
   }
-  if (stage==4) {
+  if (stage==5) {
     background(0);
     rect(rx5, ry8, rw8, rh3);
+    if (mouseX> rx5 && mouseX < rx5+rw8 && mouseY > ry8 && mouseY <ry8+rh3) {
+      full.unmute();
+    }
     rect(rx6, ry9, rw9, rh4);
+    if (mouseX > rx6 && mouseX < rx6+rw9 && mouseY > ry9 && mouseY <rw9+rh4) {
+      full.mute();
+    }
     textAlign(CENTER);
     textSize(48);
     text("SETTINGS", 500, 100);
@@ -297,6 +362,21 @@ void keyReleased() {
   }
 } 
 void campaign() {
+  //campaignbackground = loadImage("campaign.png");
+  //image(campaignbackground, 1000,800);
+  float x, y, w, h;
+  x = 600; 
+  y =50; 
+  w= 100; 
+  h =80;
+  fill(0);
+  rect(x, y, w, h);
+  if (mouseX >x && mouseX < x+w && mouseY> y && mouseY < y+h) {
+    if (mousePressed) {
+      pausegame = 1;
+      w = 1000;
+    }
+  }
   map.display();
   enemy.displaystg1lvl1();
   enemy.isInContactEnemy(player);
@@ -313,7 +393,6 @@ void campaign() {
     player.vel.y = 0;
   }
   if (player.per.x-30>= width) {
-    background(0, 0, 255);
     player.per.x = 0;
   }
   if (player.per.x-30<= 0) {
@@ -365,8 +444,11 @@ void campaign() {
   image(frameImage, 0, 0);
   popMatrix();
   // Our function to return a new smaller crop from the spritesheet.
+  if (pausegame == 1) {
+    pause.display();
+  }
 }
-void survival() {
+void survival() {  
   map.display();
   enemy.displaystg1lvl1();
   enemy.isInContactEnemy(player);
@@ -382,7 +464,6 @@ void survival() {
     player.vel.y = 0;
   }
   if (player.per.x-30>= width) {
-    background(0, 0, 255);
     player.per.x = 0;
   }
   if (player.per.x-30<= 0) {
