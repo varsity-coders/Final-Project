@@ -5,8 +5,6 @@ class Enemy {
   PVector x2, y2, picvel2;
   PVector x3, y3, picvel3;
   Enemy() {
-    image  = loadImage("enemy.png");
-    imagered = loadImage("enemyred.png");
     blast = loadImage("blast.png");
     x = new PVector(random(30, width-30), 0);
     x2 = new PVector(random(30, width-30), 0);
@@ -19,13 +17,15 @@ class Enemy {
     y3 = new PVector(0, height/2+200);
   }
 
-  void displaystg1lvl1() {
-    x.add(picvel);
-    x2.add(picvel2);
-    x3.add(picvel3);
+  void displaylvl1() {
+        image  = loadImage("enemy.png");
+    imagered = loadImage("enemyred.png");
     image(image, x.x, y.y); //flip image
     image(image, x2.x, y2.y);
     image(image, x3.x, y3.y);
+        x.add(picvel);
+    x2.add(picvel2);
+    x3.add(picvel3);
     if (x.x+40>= width) {
       picvel.x*=-1;
     }
@@ -63,6 +63,7 @@ class Enemy {
     //level.xp+=10;
     // }
   }
-  void survival() {
+  void displaysurvival(){
+    //enemydefeat
   }
 }
