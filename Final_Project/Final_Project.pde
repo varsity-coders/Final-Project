@@ -183,7 +183,7 @@ void draw() {
       }
     } else {
       c=50;
-                  rollover.rewind();
+      rollover.rewind();
     }
     if (mouseX>=rx && mouseX<=rx+rw2 && mouseY>=ry2 && mouseY<=ry2+rh) {
       r=255;
@@ -203,11 +203,11 @@ void draw() {
       }
     } else {
       d=50;
-            rollover2.rewind();
+      rollover2.rewind();
     }
   }
   if (stage==2.5) {
-        full.pause();
+    full.pause();
     background(0);
     fill(0);
     textSize(64);
@@ -239,7 +239,7 @@ void draw() {
     if (keyPressed) {
       if (key== ' ') {
         if (pausegame == 0) {
-              dream.play();
+          dream.play();
           stage = 3;
         }
       }
@@ -249,7 +249,7 @@ void draw() {
     campaign();
   }
   if (stage == 3.5) {
-     full.pause();
+    full.pause();
     background(0);
     fill(0);
     textSize(64);
@@ -291,13 +291,7 @@ void draw() {
   if (stage==5) {
     background(0);
     rect(rx5, ry8, rw8, rh3);
-    if (mouseX> rx5 && mouseX < rx5+rw8 && mouseY > ry8 && mouseY <ry8+rh3) {
-      full.unmute();
-    }
     rect(rx6, ry9, rw9, rh4);
-    if (mouseX > rx6 && mouseX < rx6+rw9 && mouseY > ry9 && mouseY <rw9+rh4) {
-      full.mute();
-    }
     textAlign(CENTER);
     textSize(48);
     text("SETTINGS", 500, 100);
@@ -314,7 +308,7 @@ void draw() {
     noFill();
     text("About The Creators", 100, 700);
     noFill();
-    dreams = loadImage("DnN.png");
+    dreams = loadImage("DN.png");
     image(dreams, 375, 175, 250, 250);
     noFill();
     rect(rx4, ry7, rw7, rh2);
@@ -327,8 +321,24 @@ void draw() {
     }
   }
   if (mouseX>=rx6 && mouseX<=rx6+rw9 && mouseY>=ry9 && mouseY<=ry9+rh4) {//this is the ON hitbox
+    if (mousePressed) {
+      full.unmute();
+      dream.unmute();
+      night.unmute();
+      rollover.unmute();
+      rollover1.unmute();
+      rollover2.unmute();
+    }
   }
   if (mouseX>=rx5 && mouseX<=rx5+rw8 && mouseY>=ry8 && mouseY<=ry8+rh3) {//this is the OFF hitbox
+    if (mousePressed) {
+      full.mute();
+      dream.mute();
+      night.mute();
+      rollover.mute();
+      rollover1.mute();
+      rollover2.mute();
+    }
   }
 }
 void keyPressed() {
