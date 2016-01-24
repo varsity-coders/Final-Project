@@ -11,7 +11,7 @@ Map map;
 Enemy enemy;
 Levels level;
 Over gameover;
-
+Shooter shoot;
 Minim minim;
 
 AudioPlayer full;
@@ -35,7 +35,7 @@ float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, z, d, rw4,
   rx6, ry9, rh4, rw9, rx10, rw10, ry10, rh10, rx11, rw11, ry11, rh11;
 PImage zig, dreams, back, load, campaignbackground;
 PFont cool;
-float loadx, loadw, loadfill, red, b;
+float loadx, loadw, loadfill;
 float customtime = 1;
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
@@ -47,6 +47,7 @@ void setup() {
   map = new Map();
   level = new Levels();
   gameover = new Over();
+  shoot = new Shooter();
   x = width/2;
   y = height/2;
   loadx = 0;
@@ -92,8 +93,6 @@ void setup() {
   ry11 = 50;
   rw11 = 50;
   rh11= 50;
-  b =0;
-  red = 255;
   loadfill = 255;
   minim = new Minim(this); //minim audio import
   full = minim.loadFile("FULL.mp3");
@@ -102,7 +101,6 @@ void setup() {
   rollover = minim.loadFile("rollover.mp3");
   rollover1 = minim.loadFile("rollover.mp3");
   rollover2 = minim.loadFile("rollover.mp3");
-  //loadscreen
 }
 
 void draw() {
@@ -352,13 +350,14 @@ void keyReleased() {
   if (key == 'z') {
     player.sp -= speedStat;
   }
+  
 } 
 void campaign() {
    dream.play();
   //campaignbackground = loadImage("campaign.png");
   //image(campaignbackground, 1000,800);
   map.display();
-
+  enemy.displaylvl1();
   pushMatrix();
   translate(player.per.x, player.per.y);
   imageMode(CENTER);
@@ -367,9 +366,14 @@ void campaign() {
   image(frameImage, 0, 0);
   popMatrix();
   // This function  returns a new smaller crop from the spritesheet.
-
-  enemy.displaylvl1();
-  enemy.isInContactEnemy(player);
+    shoot.update();
+shoot.display();
+if (keyPressed){
+  if (key == ' '){
+        shoot.setLocation(player.per.x+50,player.per.y-6, //add direction);
+}
+}
+  enemy.isInContactEnemy();
   level.display();
   player.health();
   level.levelup();
@@ -378,34 +382,40 @@ void campaign() {
   if (player.lives == 0) {
     gameover.display();
   }
-if (player.per.y < 40){
-player.per.y = -player.ysp;
-player.per.y = -player.vel.y;
+if (player.per.y < 0){
+player.vel.y = -player.vel.y;
 }
-  if (player.per.y >= map.y && player.per.x < map.w && player.per.y < map.y+map.h ) {
-        player.vel.y = 0;
-    if (keyPressed){
-      if (keyCode == UP){
+  if (player.per.x < map.w2) {
+if(player.per.y >= map.y2-map.h2){
+    player.vel.y = 0;
+    if (up !=0){
     player.vel.y= -player.ysp;
     }
-    }
   }
-    if (player.per.y >= map.y2-map.h2 && player.per.x < map.w2) {
+}
+  if (player.per.y > map.y2+map.h2 ){
+      if (player.per.x < map.w2) {
+    player.vel.y =0;
+    
+  }
+  }
+ if (player.per.y >= map.y3-map.h3 && player.per.x > map.x3) {
+      player.vel.y = 0;
+  if (keyPressed){
+    if (keyCode == UP){
+  player.vel.y = -player.ysp;
+ }
+  }
+}
+      /*if (player.per.y >= map.y3-map.h3 && player.per.x > map.x3) {
         player.vel.y = 0;
     if (keyPressed){
-      if (keyCode == UP){
+     if (keyCode == UP){
     player.vel.y = -player.ysp;
     }
     }
   }
-      if (player.per.y >= map.y3-map.h3 && player.per.x < map.w3) {
-        player.vel.y = 0;
-    if (keyPressed){
-      if (keyCode == UP){
-    player.vel.y = -player.ysp;
-    }
-    }
-  }
+  */
   if (player.per.x-30>= width) {
     player.per.x = 0;
   }
@@ -462,7 +472,7 @@ player.per.y = -player.vel.y;
     noFill();
     rect(rx10, ry10, rw10, rh10);
     imageMode(CENTER);
-        image(back, 50, 50, 50, 50);
+        image(back, 75, 75, 50, 50);
     if (keyPressed) {
       if (key == ' ') {
         stage = 3;
@@ -493,7 +503,7 @@ void survival() {
   // Our function to return a new smaller crop from the spritesheet.
 
   //enemy.displaysurvival();
-  enemy.isInContactEnemy(player);
+  enemy.isInContactEnemy();
   player.survivalhealth();
   enemy.enemydissapear();
   if (player.lives == 0) {
@@ -556,7 +566,7 @@ void survival() {
   if (key == 'p' || key == 'P') {
     background(100, 100);
     back = loadImage("BackButton.png");
-    image(back, 50, 50, 50, 50);
+    image(back, 75, 75, 50, 50);
     textSize(72);
     textAlign(CENTER);
     fill(255);

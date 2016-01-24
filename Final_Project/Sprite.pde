@@ -12,7 +12,7 @@ class Sprite {
   float ysp;
   int health =400;
     int health2 =800;
-  int lives;                //change to 3 and add life ups
+  int lives =5;                //change to 3 and add life ups
   float a =800, d=800;
   int extralives;
 
@@ -21,16 +21,18 @@ class Sprite {
     imagered = loadImage("spritesred.png");
     life = loadImage("lives.png");
     per = new PVector(xpos, ypos);
-    vel = new PVector(0, 0);
+    vel = new PVector(2, 10);
     frameRow = 0; 
     frameColumn = 0; 
     frameTime = 0;
     sp = 2;
     ysp = 14;
+    xpos = 0;
+    ypos = 10;
+    
   }
   void health() {
     noStroke();
-    lives = 5;
     fill(0, 255, 0);
     rect(230, height-45, health, 35);
     fill(255);
@@ -45,25 +47,20 @@ class Sprite {
     if (lives == 3) {
       image(life, 880, height-30);
       image(life, 920, height-30);
-      image(life, 960, height-30);
     }
 
     if (lives == 2) {
       image(life, 880, height-30);
-      image(life, 920, height-30);
     }
     if (lives == 4) {
-      extralives = 4;
+      extralives = 3;
       image(life, 880, height-30);
       text("X" +extralives, 905, height-30);
     }
     if (lives == 5) {
-      extralives = 5;
+      extralives = 4;
       image(life, 880, height-30);
       text("X" +extralives, 905, height-30);
-    }
-    if (lives == 1) {
-      image(life, 880, height-30);
     }
   }
   void loselife() {
