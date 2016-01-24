@@ -358,7 +358,7 @@ void campaign() {
   //campaignbackground = loadImage("campaign.png");
   //image(campaignbackground, 1000,800);
   map.display();
-
+  
   pushMatrix();
   translate(player.per.x, player.per.y);
   imageMode(CENTER);
