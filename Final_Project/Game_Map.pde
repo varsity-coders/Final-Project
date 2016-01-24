@@ -15,7 +15,7 @@ class Map {
   void display() {
     background(100);
     stroke(0);
-    //strokeWeight(12);
+    strokeWeight(12);
     fill(255);
     rect(x2, y2, w2, h2);
     rect(x, y, w, h);

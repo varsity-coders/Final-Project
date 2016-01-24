@@ -3,6 +3,7 @@ class Sprite {
   PImage imagered;
   PImage life;
   PVector per;
+  float xpos,ypos;
   int frameRow;
   int frameColumn;
   float frameTime;
@@ -19,7 +20,7 @@ class Sprite {
     image = loadImage("sprites.png");
     imagered = loadImage("spritesred.png");
     life = loadImage("lives.png");
-    per = new PVector(150, 200);
+    per = new PVector(xpos, ypos);
     vel = new PVector(0, 0);
     frameRow = 0; 
     frameColumn = 0; 
@@ -28,7 +29,7 @@ class Sprite {
     ysp = 14;
   }
   void health() {
-    per = new PVector(150, 100);
+    noStroke();
     lives = 5;
     fill(0, 255, 0);
     rect(230, height-45, health, 35);
@@ -103,7 +104,6 @@ class Sprite {
     }
   }
   void survivalhealth() {
-    per = new PVector(150, 200);
     lives = 1;
     fill(0, 255, 0);
     noStroke();
