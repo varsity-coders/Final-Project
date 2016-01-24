@@ -378,12 +378,15 @@ void campaign() {
   if (player.lives == 0) {
     gameover.display();
   }
-
+if (player.per.y < 40){
+player.per.y = -player.ysp;
+player.per.y = -player.vel.y;
+}
   if (player.per.y >= map.y && player.per.x < map.w && player.per.y < map.y+map.h ) {
         player.vel.y = 0;
     if (keyPressed){
       if (keyCode == UP){
-    player.vel.y = -player.ysp;
+    player.vel.y= -player.ysp;
     }
     }
   }
