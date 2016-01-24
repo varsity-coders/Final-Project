@@ -446,6 +446,9 @@ void campaign() {
     }
     if (mousePressed) {
       if (mouseX > rx10 && mouseX <rx10+rw10 && mouseY > ry10 && mouseY< ry10+rh10) {
+        dream.rewind();
+        dream.pause();
+        full.play();
         stage = 2;
       }
     }
