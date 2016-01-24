@@ -87,7 +87,7 @@ void setup() {
   rx10 = 50;
   ry10 = 50;
   rw10 = 50;
-  rh10= 50;
+  rh10 = 50;
   rx11 = 50;
   ry11 = 50;
   rw11 = 50;
@@ -428,7 +428,6 @@ void campaign() {
   if (key == 'p' || key == 'P') {
     background(100, 100);
     back = loadImage("BackButton.png");
-    image(back, 50, 50, 50, 50);
     textSize(72);
     textAlign(CENTER);
     fill(255);
@@ -438,6 +437,8 @@ void campaign() {
     text(" Press Space to Resume", width/2, 600);
     noFill();
     rect(rx10, ry10, rw10, rh10);
+    imageMode(CENTER);
+        image(back, 50, 50, 50, 50);
     if (keyPressed) {
       if (key == ' ') {
         stage = 3;

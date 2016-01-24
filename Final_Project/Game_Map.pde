@@ -15,7 +15,7 @@ class Map {
   void display() {
     background(100);
     stroke(0);
-    strokeWeight(12);
+    //strokeWeight(12);
     fill(255);
     rect(x2, y2, w2, h2);
     rect(x, y, w, h);
@@ -26,7 +26,7 @@ class Map {
     background(100);
     fill(255);
     stroke(0);
-        strokeWeight(8);
+        //strokeWeight(8);
     rect(x4, y4, w4, h4);
   }
 }
