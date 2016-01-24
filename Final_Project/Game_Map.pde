@@ -12,16 +12,32 @@ class Map {
   float w3=600;
   float h3=50;
   float x4 = 4, y4 = height/2, w4 = 990, h4 = 80;
+  PImage level1;
+  PImage level2;
+  PImage level3;
+  PImage levelBoss;
   void display() {
-    background(100);
-    stroke(0);
-    //strokeWeight(12);
-    fill(255);
+    level1=loadImage("11.png");
+    background(level1);
+    stroke(255,192,203);
+    strokeWeight(10);
+    noFill();
     rect(x2, y2, w2, h2);
     rect(x, y, w, h);
     rect(x3, y3, w3, h3);
   }
-  
+  void display2(){
+    level2=loadImage("12.png");
+    background(level2);
+  }
+  void display3(){
+    level3=loadImage("13.jpg");
+    background(level3);
+  }
+  void displayBoss(){
+    levelBoss=loadImage("14.jpg");
+    background(levelBoss);
+  }
   void survival() {
     background(100);
     fill(255);

@@ -53,7 +53,7 @@ void setup() {
   loadw = 10;
   vy = 5;
   vy = 5;
-  stage=1;
+  stage=3;
   rh=50;
   rw1=990;
   rw2=990;
