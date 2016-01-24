@@ -7,9 +7,6 @@ class Shooter {
   float bSpeed;  //bullet speed
   float fr;  //gun firerate
   float diam;
-  
-
-  //constructor
   Shooter(float newC, float newX, float newY, float bs, float nFr, float tdiam) {
     c = newC;
     diam = tdiam;
@@ -18,21 +15,20 @@ class Shooter {
     bSpeed = bs;
     fr = nFr;
     loc = new PVector(x, y);
+    vel = new PVector(5,0);
   }
 
   void display() {
     fill(c);
     stroke(c);
-    ellipse(x,y,5,5);
-  }
-  
-  void update() {
-    loc.set(x,y);
-  }
-  
-  void shoot() {
-    if (mousePressed) {
-    }
+    ellipse(loc.x, loc.y, diam, diam);
   }
 
+  void update() {
+    loc.set(x, y);
+  }
+  void shoot() {
+    ellipse(loc.x,loc.y,diam,diam);
+    loc.add(vel);
+  }
 }
