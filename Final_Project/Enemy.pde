@@ -6,15 +6,15 @@ class Enemy {
   PVector x3, y3, picvel3;
   Enemy() {
     blast = loadImage("blast.png");
-    x = new PVector(random(30, width-30), 0);
-    x2 = new PVector(random(30, width-30), 0);
-    x3 = new PVector(random(30, width-30), 0);
-    y = new PVector(0, height/2);
-    picvel = new PVector(-random(2, 3), 0);
-    picvel2 = new PVector(random(2, 3), 0);
-    picvel3 = new PVector(random(2, 3), 0);
-    y2 = new PVector(0, height/2-200);
-    y3 = new PVector(0, height/2+200);
+    x = new PVector(441, 0);
+    x2 = new PVector(41, 560);
+    x3 = new PVector(41, 560);
+    y = new PVector(0, height/2-55);
+    picvel = new PVector(-random(1, 2), 0);
+    picvel2 = new PVector(random(1, 2), 0);
+    picvel3 = new PVector(random(1, 2), 0);
+    y2 = new PVector(0, height/2-255);
+    y3 = new PVector(0, height/2+145);
   }
 
   void displaylvl1() {
@@ -29,16 +29,16 @@ class Enemy {
     if (x.x+40>= width) {
       picvel.x*=-1;
     }
-    if (x.x-40<=0) {
+    if (x.x-40<=400) {
       picvel.x*=-1;
     }
-    if (x2.x+40>= width) {
+    if (x2.x+40>= 600) {
       picvel2.x*=-1;
     }
     if (x2.x-40<=0) {
       picvel2.x*=-1;
     }
-    if (x3.x+40>= width) {
+    if (x3.x+40>= 600) {
       picvel3.x*=-1;
     }
     if (x3.x-40<=0) {

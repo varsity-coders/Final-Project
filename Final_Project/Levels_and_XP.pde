@@ -5,6 +5,7 @@ class Levels {
   float op1 = 255,op2 = 255,op3 = 255,op4 = 255,
 op5 = 255,op6 = 255,op7 = 255,op8 = 255,op9 = 255;
   void display() {
+    noStroke();
     fill(0, 112, 186);
     rect(20, height-45, xp, 35);
     fill(255);
