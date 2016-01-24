@@ -1,5 +1,5 @@
 class Enemy {
-  PImage image, imagered;
+  PImage image, imagered, BOSS;
   PImage blast;  
   PVector x, y, picvel;
   PVector x2, y2, picvel2;
