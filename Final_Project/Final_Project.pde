@@ -25,11 +25,10 @@ AudioPlayer loadscreen;
 float fill = 255;
 float l = 0;
 float r = 0;
-float down = 0;
 float up = 0;
 float grav = .5;
 float floor = 700;
-float speedStat = 2;
+float speedStat = 1;
 float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, z, d, rw4, 
   rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3, rx4, ry7, rh2, rw7, rx5, ry8, rh3, rw8, 
   rx6, ry9, rh4, rw9, rx10, rw10, ry10, rh10, rx11, rw11, ry11, rh11;
@@ -350,14 +349,12 @@ void keyReleased() {
   if (key == 'z') {
     player.sp -= speedStat;
   }
-  
 } 
 void campaign() {
-   dream.play();
+  dream.play();
   //campaignbackground = loadImage("campaign.png");
   //image(campaignbackground, 1000,800);
   map.display();
-  enemy.displaylvl1();
   pushMatrix();
   translate(player.per.x, player.per.y);
   imageMode(CENTER);
@@ -366,14 +363,30 @@ void campaign() {
   image(frameImage, 0, 0);
   popMatrix();
   // This function  returns a new smaller crop from the spritesheet.
-    shoot.update();
-shoot.display();
-if (keyPressed){
-  if (key == ' '){
-        shoot.setLocation(player.per.x+50,player.per.y-6, //add direction);
-}
-}
-  enemy.isInContactEnemy();
+    enemy.displaylvl1();
+  shoot.updateleft();
+  shoot.updateright();
+  shoot.displayright();
+  shoot.displayleft();
+  if (r!=0) {
+    if (keyPressed) {
+      if (key == ' ') {
+        shoot.shoot = true;
+        shoot.setLocationright(player.per.x+50, player.per.y-6); //add direction);
+      }
+    }
+  }
+  if (l!=0) {
+    if (keyPressed) {
+      if (key == ' ') {
+        shoot.shootleft = true;
+        shoot.setLocationleft(player.per.x-50, player.per.y-6); //add direction);
+      }
+    }
+  }
+  enemy.isInContactEnemyfromRight();
+  enemy.isInContactEnemyfromLeft();
+  enemy.isEnemyinContactWith();
   level.display();
   player.health();
   level.levelup();
@@ -382,40 +395,39 @@ if (keyPressed){
   if (player.lives == 0) {
     gameover.display();
   }
-if (player.per.y < 0){
-player.vel.y = -player.vel.y;
-}
+  if (player.per.y < 0) {
+    player.vel.y = -player.vel.y;
+  }
   if (player.per.x < map.w2) {
-if(player.per.y >= map.y2-map.h2){
-    player.vel.y = 0;
-    if (up !=0){
-    player.vel.y= -player.ysp;
-    }
-  }
-}
-  if (player.per.y > map.y2+map.h2 ){
-      if (player.per.x < map.w2) {
-    player.vel.y =0;
-    
-  }
-  }
- if (player.per.y >= map.y3-map.h3 && player.per.x > map.x3) {
+    if (player.per.y >= map.y2-map.h2) {
       player.vel.y = 0;
-  if (keyPressed){
-    if (keyCode == UP){
-  player.vel.y = -player.ysp;
- }
-  }
-}
-      /*if (player.per.y >= map.y3-map.h3 && player.per.x > map.x3) {
-        player.vel.y = 0;
-    if (keyPressed){
-     if (keyCode == UP){
-    player.vel.y = -player.ysp;
-    }
+      if (up !=0) {
+        player.vel.y= -player.ysp;
+      }
     }
   }
-  */
+  if (player.per.y > map.y2+map.h2 ) {
+    if (player.per.x < map.w2) {
+      player.vel.y =0;
+    }
+  }
+  if (player.per.y >= map.y3-map.h3 && player.per.x > map.x3) {
+    player.vel.y = 0;
+    if (keyPressed) {
+      if (keyCode == UP) {
+        player.vel.y = -player.ysp;
+      }
+    }
+  }
+  /*if (player.per.y >= map.y3-map.h3 && player.per.x > map.x3) {
+   player.vel.y = 0;
+   if (keyPressed){
+   if (keyCode == UP){
+   player.vel.y = -player.ysp;
+   }
+   }
+   }
+   */
   if (player.per.x-30>= width) {
     player.per.x = 0;
   }
@@ -449,13 +461,13 @@ if(player.per.y >= map.y2-map.h2){
     player.frameRow = 1;
   } 
   if (level.l == 1) {
-    if (player.sp > 4 || player.sp<1) {
+    if (player.sp > 3 || player.sp<1) {
       player.sp = 2;
     }
   }
   if (level.l == 2) {
-    speedStat = 4;
-    if (player.sp > 8 || player.sp<1) {
+    speedStat = 2;
+    if (player.sp > 4 || player.sp<1) {
       player.sp = 2;  //add other levels to game
     }
   }
@@ -472,7 +484,7 @@ if(player.per.y >= map.y2-map.h2){
     noFill();
     rect(rx10, ry10, rw10, rh10);
     imageMode(CENTER);
-        image(back, 75, 75, 50, 50);
+    image(back, 75, 75, 50, 50);
     if (keyPressed) {
       if (key == ' ') {
         stage = 3;
@@ -503,7 +515,7 @@ void survival() {
   // Our function to return a new smaller crop from the spritesheet.
 
   //enemy.displaysurvival();
-  enemy.isInContactEnemy();
+  //enemy.isInContactEnemy();
   player.survivalhealth();
   enemy.enemydissapear();
   if (player.lives == 0) {
@@ -512,7 +524,7 @@ void survival() {
   if (player.per.y >= map.y-map.h && player.per.x < map.w) {
     player.vel.y = 0;
   }
-    if (player.per.y > map.y-map.h) {
+  if (player.per.y > map.y-map.h) {
     player.vel.y += grav;
   } else {
     player.vel.y = 0;

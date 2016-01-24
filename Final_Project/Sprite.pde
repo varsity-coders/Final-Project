@@ -38,11 +38,6 @@ class Sprite {
     fill(255);
     textSize(16);
     text("Health:"+health, 230, height-50);
-    if (keyPressed) {
-      if (key == 't') { //change just for test
-        health-=25;
-      }
-    }
     text("Lives:", 813, height-30);
     if (lives == 3) {
       image(life, 880, height-30);
@@ -93,11 +88,7 @@ class Sprite {
         health = 0;
         lives = 0;
       }
-    }
-    if (lives == 0) {
-      if (mousePressed) { //change to button
-        lives = 4;
-      }
+    
     }
   }
   void survivalhealth() {

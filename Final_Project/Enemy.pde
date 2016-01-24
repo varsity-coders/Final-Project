@@ -7,6 +7,7 @@ class Enemy {
   float x3, y3; 
   float picvel3;
   float health2;
+  boolean draw1;
   Enemy() {
     x = 441;
     x2 = 41;
@@ -17,13 +18,17 @@ class Enemy {
     y = height/2-55;
     y2 =height/2-255;
     y3 = height/2+145;
+    health2 = 10;
   }
 
   void displaylvl1() {
+          println(health2);
     image  = loadImage("enemy.png");
-    imagered = loadImage("enemyred.png");
+    draw1=true;
+    if  (draw1==true) {
+      image(image, x2, y2);
+    }
     image(image, x, y);
-    image(image, x2, y2);
     image(image, x3, y3);
     x += picvel;
     x2 += picvel2;
@@ -47,10 +52,31 @@ class Enemy {
       picvel3*=-1;
     }
   }
-  boolean isInContactEnemy() { 
+  void updatelvl1(){
+        if (health2 <=0 ){
+  health2 = 0;
+  draw1 = false;
+}
+  }
+  boolean isInContactEnemyfromRight() { 
     if ( dist(x2, y2, shoot.x, shoot.y) < 5) { 
-      health2 -=2;
-      println(health2);
+      health2 -=1;
+      return true;
+    } else {      
+      return false;
+    }
+  }
+      boolean isInContactEnemyfromLeft() { 
+        if ( dist(x2, y2, shoot.x2, shoot.y2) < 5) { 
+      health2 -=1;
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isEnemyinContactWith() { 
+    if ( dist(player.per.x, player.per.y, x2, y2) < 80) { 
+      player.health -=2;
       return true;
     } else {      
       return false;
@@ -60,11 +86,12 @@ class Enemy {
   }
 
   void enemydissapear() {
-    //if ("enemydissapear"){
-    //level.xp+=10;
-    // }
+    if (health2 == 0){
+    level.xp+=10;
+     }
   }
   void displaysurvival() {
+        imagered = loadImage("enemyred.png");
     //enemydefeat
   }
 }

@@ -1,37 +1,59 @@
 class Shooter {
-  float x,y,d;
-  PVector speed;
-  boolean shoot;
-  PImage blast;
+  float x, y, d, x2, y2, d2;
+  float speed, speed2;
+  boolean shoot, shootleft;
+  PImage blastblue, blast;
+  PImage blastblueleft, blastleft;
   Shooter() {
     shoot = false;
-    speed = new PVector(4, 0);
+    speed = 4;
+    speed2 = 4;
     blast = loadImage("blast.png");
+    blastleft = loadImage("blast2.png");
+    blastblue = loadImage("blastblue.png");
+    blastblueleft = loadImage("blastblue2.png");
   }
-  void setLocation(float startx, float starty, float direction) {
-    x = startx;
-    y = starty;
-    d = direction;
+  void setLocationright(float initialx, float initialy) { // float direction) {
+    x = initialx;
+    y = initialy;
+    // d = direction;
     shoot = true;
   }
-  void display() {
-    fill(0,0,255);
-    if (shoot == true){
-    image(blast,x,y);
+  void setLocationleft(float initialx2, float initialy2) { // float direction) {
+    x2 = initialx2;
+    y2 = initialy2;
+    // d = direction;
+    shootleft = true;
   }
-  if (r!=0){
-    scale(-1,1);
-  }
-  }
-  void update() { //if level up shoot faster
+  void displayright() {
     if (shoot == true) {
-      x+=speed.x;
-      if (x >enemy.x2-35 && y > enemy.y2) {
-        shoot = false;
-      }
+      image(blastblue, x, y);
+    }
+  }
+  void displayleft() {
+    if (shootleft == true) {
+      image(blastblueleft, x2, y2);
+    }
+  }
+  void updateright() { //if level up shoot faster
+    if (shoot == true) {
+      x+=speed;
+    }
+     if (x >enemy.x2-35 && y > enemy.y2) {
+      shoot = false;
+    }
+    
+  }
+      void updateleft() { 
+    if (shootleft == true) {
+      x2-=speed2;
+    }
+         if (x2 < enemy.x2+35 && y2 > enemy.y2) {
+      shootleft = false;
     }
   }
 }
+
 
 /*
   PVector loc;  //bottom left point

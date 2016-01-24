@@ -13,12 +13,7 @@ op5 = 255,op6 = 255,op7 = 255,op8 = 255,op9 = 255;
     text("XP:"+xp, 20, height-50);
     fill(255);
     textSize(22);
-    text("Level:" + l, 700, height-25); //change just for testing
-    if (keyPressed) {
-      if (key == 'r') {
-        xp+=1;
-      }
-    }
+    text("Level:" + l, 700, height-25); //change just for testing  
       if (xp >200) {
         xp = 0;
         l+=1;

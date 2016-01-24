@@ -1,5 +1,6 @@
 class Over {
   void display() {
+    dream.pause();
     background(0);
     textSize(72);
     textAlign(CENTER);
