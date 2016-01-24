@@ -39,19 +39,22 @@ class Shooter {
     if (shoot == true) {
       x+=speed;
     }
+    if (enemy.health2 >0){
      if (x >enemy.x2-35 && y > enemy.y2) {
       shoot = false;
     }
-    
+    }
   }
       void updateleft() { 
     if (shootleft == true) {
       x2-=speed2;
     }
+        if (enemy.health2 >0){
          if (x2 < enemy.x2+35 && y2 > enemy.y2) {
       shootleft = false;
     }
   }
+      }
 }
 
 

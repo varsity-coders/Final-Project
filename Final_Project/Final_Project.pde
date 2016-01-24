@@ -21,6 +21,8 @@ AudioPlayer rollover;
 AudioPlayer rollover1;
 AudioPlayer rollover2;
 AudioPlayer loadscreen;
+AudioPlayer laserblast;
+AudioPlayer laserblast2;
 
 float fill = 255;
 float l = 0;
@@ -100,7 +102,10 @@ void setup() {
   rollover = minim.loadFile("rollover.mp3");
   rollover1 = minim.loadFile("rollover.mp3");
   rollover2 = minim.loadFile("rollover.mp3");
+  laserblast = minim.loadFile("LaserBlasts.mp3");
+    laserblast2 = minim.loadFile("LaserBlasts.mp3");
 }
+
 
 void draw() {
   cool = loadFont("BankGothicBT-Medium-48.vlw");    
@@ -307,6 +312,7 @@ void draw() {
       rollover.unmute();
       rollover1.unmute();
       rollover2.unmute();
+      laserblast.unmute();
     }
   }
   if (mouseX>=rx5 && mouseX<=rx5+rw8 && mouseY>=ry8 && mouseY<=ry8+rh3) {//this is the OFF hitbox
@@ -317,6 +323,7 @@ void draw() {
       rollover.mute();
       rollover1.mute();
       rollover2.mute();
+      laserblast.mute();
     }
   }
 }
@@ -339,9 +346,13 @@ void keyReleased() {
   if (keyCode == RIGHT) {
     r = 0;
     player.frameTime = 1;
+            laserblast.rewind();
+        laserblast.pause();
   }
   if (keyCode == LEFT) {
     l = 0;
+        laserblast2.rewind();
+        laserblast2.pause();
   }
   if (keyCode == UP) {
     up = 0;
@@ -355,6 +366,7 @@ void campaign() {
   //campaignbackground = loadImage("campaign.png");
   //image(campaignbackground, 1000,800);
   map.display();
+      enemy.displaylvl1();
   pushMatrix();
   translate(player.per.x, player.per.y);
   imageMode(CENTER);
@@ -363,7 +375,7 @@ void campaign() {
   image(frameImage, 0, 0);
   popMatrix();
   // This function  returns a new smaller crop from the spritesheet.
-    enemy.displaylvl1();
+    enemy.updatelvl1();
   shoot.updateleft();
   shoot.updateright();
   shoot.displayright();
@@ -373,6 +385,7 @@ void campaign() {
       if (key == ' ') {
         shoot.shoot = true;
         shoot.setLocationright(player.per.x+50, player.per.y-6); //add direction);
+       laserblast.play();
       }
     }
   }
@@ -381,12 +394,20 @@ void campaign() {
       if (key == ' ') {
         shoot.shootleft = true;
         shoot.setLocationleft(player.per.x-50, player.per.y-6); //add direction);
+          laserblast.play();
       }
     }
   }
   enemy.isInContactEnemyfromRight();
   enemy.isInContactEnemyfromLeft();
-  enemy.isEnemyinContactWith();
+    enemy.isInContactEnemyfromRight2();
+  enemy.isInContactEnemyfromLeft2();
+    enemy.isInContactEnemyfromRight3();
+  enemy.isInContactEnemyfromLeft3();
+  enemy.isEnemyinContactWith1();
+    enemy.isEnemyinContactWith2();
+      enemy.isEnemyinContactWith3();
+  //enemy.isEnemyinContactWith();
   level.display();
   player.health();
   level.levelup();

@@ -26,10 +26,9 @@ class Sprite {
     frameColumn = 0; 
     frameTime = 0;
     sp = 2;
-    ysp = 14;
+    ysp = 15;
     xpos = 0;
     ypos = 10;
-    
   }
   void health() {
     noStroke();
