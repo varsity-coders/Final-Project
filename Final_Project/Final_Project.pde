@@ -53,7 +53,7 @@ void setup() {
   loadw = 10;
   vy = 5;
   vy = 5;
-  stage=1;
+  stage=3;
   rh=50;
   rw1=990;
   rw2=990;
@@ -354,7 +354,7 @@ void keyReleased() {
   }
 } 
 void campaign() {
-  dream.play();
+   dream.play();
   //campaignbackground = loadImage("campaign.png");
   //image(campaignbackground, 1000,800);
   map.display();
@@ -378,9 +378,33 @@ void campaign() {
   if (player.lives == 0) {
     gameover.display();
   }
-
-  if (player.per.y >= map.y-map.h && player.per.x < map.w) {
-    player.vel.y = 0;
+if (player.per.y < 40){
+player.per.y = -player.ysp;
+player.per.y = -player.vel.y;
+}
+  if (player.per.y >= map.y && player.per.x < map.w && player.per.y < map.y+map.h ) {
+        player.vel.y = 0;
+    if (keyPressed){
+      if (keyCode == UP){
+    player.vel.y= -player.ysp;
+    }
+    }
+  }
+    if (player.per.y >= map.y2-map.h2 && player.per.x < map.w2) {
+        player.vel.y = 0;
+    if (keyPressed){
+      if (keyCode == UP){
+    player.vel.y = -player.ysp;
+    }
+    }
+  }
+      if (player.per.y >= map.y3-map.h3 && player.per.x < map.w3) {
+        player.vel.y = 0;
+    if (keyPressed){
+      if (keyCode == UP){
+    player.vel.y = -player.ysp;
+    }
+    }
   }
   if (player.per.x-30>= width) {
     player.per.x = 0;
@@ -477,6 +501,14 @@ void survival() {
   }
   if (player.per.y >= map.y-map.h && player.per.x < map.w) {
     player.vel.y = 0;
+  }
+    if (player.per.y > map.y-map.h) {
+    player.vel.y += grav;
+  } else {
+    player.vel.y = 0;
+  }
+  if (player.per.y >= floor && up != 0) {
+    player.vel.y = -player.ysp;
   }
   if (player.per.x-30>= width) {
     player.per.x = 0;
