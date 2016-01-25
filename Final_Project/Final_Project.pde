@@ -4,13 +4,12 @@ import ddf.minim.effects.*;
 import ddf.minim.signals.*;
 import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
-
+//fix mousePressed error when entering campaign
 
 Sprite player;
 Map map;
 Enemy enemy;
 Levels level;
-Over gameover;
 Shooter shoot;
 Minim minim;
 
@@ -31,12 +30,12 @@ float up = 0;
 float grav = .5;
 float floor = 750;
 float speedStat = 1;
-float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, z, d, rw4, 
+float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, c, z, d, rw4, 
   rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3, rx4, ry7, rh2, rw7, rx5, ry8, rh3, rw8, 
   rx6, ry9, rh4, rw9, rx10, rw10, ry10, rh10, rx11, rw11, ry11, rh11;
 PImage zig, dreams, back, load, campaignbackground;
 PFont cool;
-float loadx, loadw, loadfill;
+float loadx, loadw, loadfill, stage, newstage;
 float customtime = 1;
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
@@ -47,7 +46,6 @@ void setup() {
   player = new Sprite();
   map = new Map();
   level = new Levels();
-  gameover = new Over();
   shoot = new Shooter();
   x = width/2;
   y = height/2;
@@ -56,6 +54,7 @@ void setup() {
   vy = 5;
   vy = 5;
   stage=3;
+  newstage = 0;
   rh=50;
   rw1=990;
   rw2=990;
@@ -225,11 +224,11 @@ void draw() {
     }
     if (customtime >10000) {
       fill(255);
-      text("PRESS SPACE TO PLAY", width/2, 750);
-      if (keyPressed) {
-        if (key== ' ') {
-          stage = 3;
-        }
+      text("CLICK TO PLAY", width/2, 750);
+      if (mousePressed) {
+        //fix the player after this happens
+        // add second level
+        stage = 3;
       }
     }
   }
@@ -259,14 +258,14 @@ void draw() {
     if (customtime >10000) {
       fill(255);
       text("NOW SURVIVE", width/2, 750);
-      if (keyPressed) {
-        if (key== ' ') {
-          stage = 4;
-        }
+      if (mousePressed) {
+        stage = 4;
       }
     }
   }
   if (stage==4) {
+    //fix survival
+    //test survival A LOT
     survival();
   }
   if (stage==5) {
@@ -326,7 +325,34 @@ void draw() {
       laserblast.mute();
     }
   }
+  if ( newstage ==6 ) {
+    dream.mute();
+    background(0);
+    textSize(72);
+    textAlign(CENTER);
+    text("Game Over", width/2, height/2);
+    textSize(48);
+    text("Click to Go Back to Menu", width/2, height/2+100);
+    if (mousePressed) { //problem here after click
+      stage =2;
+      dream.pause();
+    }
+  }
+  if (newstage == 7) {
+    night.mute();
+    background(0);
+    textSize(72);
+    textAlign(CENTER);
+    text("You Failed", width/2, height/2);
+    textSize(48);
+    text("Click to Go Back to Menu", width/2, height/2+100);
+    if (mousePressed) { ////problem here after click
+      night.pause();
+      stage =2;
+    }
+  }
 }
+
 void keyPressed() {
   if (keyCode == RIGHT) {
     r = 1;
@@ -407,41 +433,40 @@ void campaign() {
   enemy.isEnemyinContactWith1();
   enemy.isEnemyinContactWith2();
   enemy.isEnemyinContactWith3();
-  //enemy.isEnemyinContactWith();
   level.display();
   player.health();
   level.levelup();
   enemy.enemydissapear();
   player.loselife();
   if (player.lives == 0) {
-    gameover.display();
+    newstage = 6;
   }
-  if (player.per.y < -5) {
+  if (player.per.y < -2) {
     player.vel.y = -player.vel.y;
   }
- if (enemy.health >-5) {
-      if (player.per.y >= map.y-map.h && player.per.x < map.x+map.w) {
-        player.vel.y = 0;
-        if (up !=0) {
-          player.vel.y= -player.ysp;
-      }
-    }
-  }
-  
-  if (enemy.health2>-5) {
-    if (player.per.y > map.y2-map.h2 && player.per.x > map.x2 ) {
-        player.vel.y =0;
-              if (up !=0) {
-        player.vel.y = -player.ysp;
-      }
-    }
-  }
-  
-    if (player.per.y >= map.y3-map.h3) {
+  if (enemy.health >-2) {
+    if (player.per.y >= map.y-map.h && player.per.x < map.w) {
       player.vel.y = 0;
       if (up !=0) {
+        player.vel.y= -player.ysp;
+      }
+    }else if (player.per.y>map.h && player.per.x< 600){
+          player.vel.y += grav;
+  }
+  }
+  if (enemy.health2>-2) {
+    if (player.per.y > map.y2-map.h2 && player.per.x > map.x2 ) {
+      player.vel.y =0;
+      if (up !=0) {
         player.vel.y = -player.ysp;
+      }
+    }
+  }
 
+  if (player.per.y >= map.y3-map.h3) {
+    player.vel.y = 0;
+    if (up !=0) {
+      player.vel.y = -player.ysp;
     }
   }
 
@@ -494,6 +519,7 @@ void campaign() {
     if (player.sp > 4 || player.sp<1) {
       player.sp = 2;
     }
+  }
     if (level.l == 3) {
       speedStat = 3;
       if (player.sp > 5 || player.sp<0) {
@@ -505,143 +531,142 @@ void campaign() {
       if (player.sp > 6 || player.sp<0) {
         player.sp = 2;
       }
-      if (level.l == 5) {
-        speedStat = 5;
-        if (player.sp > 7 || player.sp<-1) {
-          player.sp = 2;
-        }
-      }
-      if (key == 'p' || key == 'P') {
-        background(100, 100);
-        back = loadImage("BackButton.png");
-        textSize(72);
-        textAlign(CENTER);
-        fill(255);
-        text("Paused", width/2, height/2);
-        textAlign(CENTER);
-        textSize(48);
-        text(" Press Space to Resume", width/2, 600);
-        noFill();
-        rect(rx10, ry10, rw10, rh10);
-        imageMode(CENTER);
-        image(back, 75, 75, 50, 50);
-        if (keyPressed) {
-          if (key == ' ') {
-            stage = 3;
-          }
-        }
-        if (mousePressed) {
-          if (mouseX > rx10 && mouseX <rx10+rw10 && mouseY > ry10 && mouseY< ry10+rh10) {
-            dream.rewind();
-            dream.pause();
-            full.play();
-            stage = 2;
-          }
-        }
+    }
+    if (level.l == 5) {
+      speedStat = 5;
+      if (player.sp > 7 || player.sp<-1) {
+        player.sp = 2;
       }
     }
-  }
-}
-
-void survival() {  
-  night.play();
-  map.survival();
-
-  pushMatrix();
-  translate(player.per.x, player.per.y);
-  imageMode(CENTER);
-  PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
-  // Draw this image instead of player.image
-  image(frameImagered, 0, 0);
-  popMatrix();
-  // Our function to return a new smaller crop from the spritesheet.
-
-  //enemy.displaysurvival();
-  //enemy.isInContactEnemy();
-  player.survivalhealth();
-  enemy.enemydissapear();
-  if (player.lives == 0) {
-    gameover.survival();
-  }
-  if (player.per.y >= map.y-map.h && player.per.x < map.w) {
-    player.vel.y = 0;
-  }
-  if (player.per.y > map.y-map.h) {
-    player.vel.y += grav;
-  } else {
-    player.vel.y = 0;
-  }
-  if (player.per.y >= floor && up != 0) {
-    player.vel.y = -player.ysp;
-  }
-  if (player.per.x-30>= width) {
-    player.per.x = 0;
-  }
-  if (player.per.x-30<= 0) {
-    player.per.x = 35;
-  }
-  player.vel.x = player.sp * (l + r);
-  player.per.add(player.vel);
-  if (player.per.y < floor) {
-    player.vel.y += grav;
-  } else {
-    player.vel.y = 0;
-  }
-  if (player.per.y >= floor && up != 0) {
-    player.vel.y = -player.ysp;
-  }
-  player.frameTime += .25; 
-  if (player.frameTime >= 8) { 
-    player.frameTime = 1;
-  }
-  player.frameColumn = (int)player.frameTime;
-
-  if (player.vel.x == 0 && player.vel.y == 0) {
-    player.frameColumn = 0;
-  }
-
-  if (l != 0) {
-    player.frameRow = 0;
-  }
-  if (r != 0) {
-    player.frameRow = 1;
-  } 
-  if (level.l == 1) {
-    if (player.sp > 4 || player.sp<1) {
-      player.sp = 2;
-    }
-  }
-  if (level.l == 2) {
-    speedStat = 4;
-    if (player.sp > 8 || player.sp<1) {
-      player.sp = 2;  //add other levels to game
-    }
-  }
-  if (key == 'p' || key == 'P') {
-    background(100, 100);
-    back = loadImage("BackButton.png");
-    image(back, 75, 75, 50, 50);
-    textSize(72);
-    textAlign(CENTER);
-    fill(255);
-    text("Paused", width/2, height/2);
-    textAlign(CENTER);
-    textSize(48);
-    text(" Press Space to Resume", width/2, 600);
-    noFill();
-    rect(rx11, ry11, rw11, rh11);
-    if (keyPressed) {
-      if (key == ' ') {
-        stage = 4;
+    if (key == 'p' || key == 'P') {
+      background(100, 100);
+      back = loadImage("BackButton.png");
+      textSize(72);
+      textAlign(CENTER);
+      fill(255);
+      text("Paused", width/2, height/2);
+      textAlign(CENTER);
+      textSize(48);
+      text(" Press Space to Resume", width/2, 600);
+      noFill();
+      rect(rx10, ry10, rw10, rh10);
+      imageMode(CENTER);
+      image(back, 75, 75, 50, 50);
+      if (keyPressed) {
+        if (key == ' ') {
+          stage = 3;
+        }
       }
     }
     if (mousePressed) {
-      if (mouseX > rx11 && mouseX<rx11+rw11 && mouseY > ry11 && mouseX< ry11+rh11) {
-        night.rewind();
-        night.pause();
+      if (mouseX > rx10 && mouseX <rx10+rw10 && mouseY > ry10 && mouseY< ry10+rh10) {
+        dream.rewind();
+        dream.pause();
         full.play();
         stage = 2;
       }
     }
   }
-}
+
+  void survival() {  
+    night.play();
+    map.survival();
+
+    pushMatrix();
+    translate(player.per.x, player.per.y);
+    imageMode(CENTER);
+    PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
+    // Draw this image instead of player.image
+    image(frameImagered, 0, 0);
+    popMatrix();
+    // Our function to return a new smaller crop from the spritesheet.
+
+    //enemy.displaysurvival();
+    //enemy.isInContactEnemy();
+    player.survivalhealth();
+    enemy.enemydissapear();
+    if (player.lives == 0) {
+      newstage = 7;
+    }
+    if (player.per.y >= map.y-map.h && player.per.x < map.w) {
+      player.vel.y = 0;
+    }
+    if (player.per.y > map.y-map.h) {
+      player.vel.y += grav;
+    } else {
+      player.vel.y = 0;
+    }
+    if (player.per.y >= floor && up != 0) {
+      player.vel.y = -player.ysp;
+    }
+    if (player.per.x-30>= width) {
+      player.per.x = 0;
+    }
+    if (player.per.x-30<= 0) {
+      player.per.x = 35;
+    }
+    player.vel.x = player.sp * (l + r);
+    player.per.add(player.vel);
+    if (player.per.y < floor) {
+      player.vel.y += grav;
+    } else {
+      player.vel.y = 0;
+    }
+    if (player.per.y >= floor && up != 0) {
+      player.vel.y = -player.ysp;
+    }
+    player.frameTime += .25; 
+    if (player.frameTime >= 8) { 
+      player.frameTime = 1;
+    }
+    player.frameColumn = (int)player.frameTime;
+
+    if (player.vel.x == 0 && player.vel.y == 0) {
+      player.frameColumn = 0;
+    }
+
+    if (l != 0) {
+      player.frameRow = 0;
+    }
+    if (r != 0) {
+      player.frameRow = 1;
+    } 
+    if (level.l == 1) {
+      if (player.sp > 4 || player.sp<1) {
+        player.sp = 2;
+      }
+    }
+    if (level.l == 2) {
+      speedStat = 4;
+      if (player.sp > 8 || player.sp<1) {
+        player.sp = 2;  //add other levels to game
+      }
+    }
+    if (key == 'p' || key == 'P') {
+      background(100, 100);
+      back = loadImage("BackButton.png");
+      image(back, 75, 75, 50, 50);
+      textSize(72);
+      textAlign(CENTER);
+      fill(255);
+      text("Paused", width/2, height/2);
+      textAlign(CENTER);
+      textSize(48);
+      text(" Press Space to Resume", width/2, 600);
+      noFill();
+      rect(rx11, ry11, rw11, rh11);
+      if (keyPressed) {
+        if (key == ' ') {
+          stage = 4;
+        }
+      }
+      if (mousePressed) {
+        if (mouseX > rx11 && mouseX<rx11+rw11 && mouseY > ry11 && mouseX< ry11+rh11) {
+          night.rewind();
+          night.pause();
+          full.play();
+          stage = 2;
+        }
+      }
+    }
+  }

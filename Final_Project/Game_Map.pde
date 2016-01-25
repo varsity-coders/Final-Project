@@ -20,6 +20,12 @@ class Map {
         rect(x, y, w, h);
     rect(x2, y2, w2, h2);
     rect(x3, y3, w3, h3);
+    if (enemy.health <1 && enemy.health2 < 1 && enemy.health3 < 1 ){
+      fill(0);
+      textSize(32);
+      text("Proceed to Next Dream",565,550);
+    }
+    
   }
   
   void survival() {

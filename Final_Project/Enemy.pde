@@ -19,8 +19,8 @@ class Enemy {
     y2 =height/2-55;
     y3 = height/2+145;
     health = 15;
-    health2 = 30;
-    health3 = 45;
+    health2 = 25;
+    health3 = 35;
     image  = loadImage("enemy.png");
     draw=true;
     draw2=true;
@@ -28,9 +28,7 @@ class Enemy {
   }
 
   void displaylvl1() {
-          println(enemy.health);
-                println(enemy.health2);
-      println(enemy.health3);
+      println(enemy.health3); //fix enemy health 3
     if  (draw==true) {
       image(image, x, y);
     }
@@ -129,7 +127,7 @@ class Enemy {
     }
   }
   boolean isInContactEnemyfromLeft3() { 
-    if ( dist(x3, y3, shoot.x2, shoot.y2) < 10) { 
+    if ( dist(shoot.x2, shoot.y2, x3, y3) < 10) { 
       health3 -=1;
       if (health3 < 1 ) {
         draw3 = false;
