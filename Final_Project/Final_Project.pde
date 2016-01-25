@@ -11,7 +11,7 @@ Map map;
 Enemy enemy;
 Levels level;
 Over gameover;
-
+Shooter shoot;
 Minim minim;
 
 AudioPlayer full;
@@ -21,21 +21,22 @@ AudioPlayer rollover;
 AudioPlayer rollover1;
 AudioPlayer rollover2;
 AudioPlayer loadscreen;
+AudioPlayer laserblast;
+AudioPlayer laserblast2;
 
 float fill = 255;
 float l = 0;
 float r = 0;
-float down = 0;
 float up = 0;
 float grav = .5;
-float floor = 700;
-float speedStat = 2;
+float floor = 750;
+float speedStat = 1;
 float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, stage, c, z, d, rw4, 
   rw5, rw6, rh1, ry4, ry5, ry6, rx1, rx2, rx3, rx4, ry7, rh2, rw7, rx5, ry8, rh3, rw8, 
   rx6, ry9, rh4, rw9, rx10, rw10, ry10, rh10, rx11, rw11, ry11, rh11;
 PImage zig, dreams, back, load, campaignbackground;
 PFont cool;
-float loadx, loadw, loadfill, red, b;
+float loadx, loadw, loadfill;
 float customtime = 1;
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
@@ -47,6 +48,7 @@ void setup() {
   map = new Map();
   level = new Levels();
   gameover = new Over();
+  shoot = new Shooter();
   x = width/2;
   y = height/2;
   loadx = 0;
@@ -92,8 +94,6 @@ void setup() {
   ry11 = 50;
   rw11 = 50;
   rh11= 50;
-  b =0;
-  red = 255;
   loadfill = 255;
   minim = new Minim(this); //minim audio import
   full = minim.loadFile("FULL.mp3");
@@ -102,8 +102,10 @@ void setup() {
   rollover = minim.loadFile("rollover.mp3");
   rollover1 = minim.loadFile("rollover.mp3");
   rollover2 = minim.loadFile("rollover.mp3");
-  //loadscreen
+  laserblast = minim.loadFile("LaserBlasts.mp3");
+  laserblast2 = minim.loadFile("LaserBlasts.mp3");
 }
+
 
 void draw() {
   cool = loadFont("BankGothicBT-Medium-48.vlw");    
@@ -310,6 +312,7 @@ void draw() {
       rollover.unmute();
       rollover1.unmute();
       rollover2.unmute();
+      laserblast.unmute();
     }
   }
   if (mouseX>=rx5 && mouseX<=rx5+rw8 && mouseY>=ry8 && mouseY<=ry8+rh3) {//this is the OFF hitbox
@@ -320,6 +323,7 @@ void draw() {
       rollover.mute();
       rollover1.mute();
       rollover2.mute();
+      laserblast.mute();
     }
   }
 }
@@ -342,9 +346,13 @@ void keyReleased() {
   if (keyCode == RIGHT) {
     r = 0;
     player.frameTime = 1;
+    laserblast.rewind();
+    laserblast.pause();
   }
   if (keyCode == LEFT) {
     l = 0;
+    laserblast2.rewind();
+    laserblast2.pause();
   }
   if (keyCode == UP) {
     up = 0;
@@ -354,11 +362,11 @@ void keyReleased() {
   }
 } 
 void campaign() {
-   dream.play();
+  dream.play();
   //campaignbackground = loadImage("campaign.png");
   //image(campaignbackground, 1000,800);
   map.display();
-
+  enemy.displaylvl1();
   pushMatrix();
   translate(player.per.x, player.per.y);
   imageMode(CENTER);
@@ -367,9 +375,39 @@ void campaign() {
   image(frameImage, 0, 0);
   popMatrix();
   // This function  returns a new smaller crop from the spritesheet.
-
-  enemy.displaylvl1();
-  enemy.isInContactEnemy(player);
+  enemy.updatelvl1();
+  shoot.updateleft();
+  shoot.updateright();
+  shoot.displayright();
+  shoot.displayleft();
+  if (r!=0) {
+    if (keyPressed) {
+      if (key == ' ') {
+        shoot.shoot = true;
+        shoot.setLocationright(player.per.x+50, player.per.y-6); //add direction);
+        laserblast.play();
+      }
+    }
+  }
+  if (l!=0) {
+    if (keyPressed) {
+      if (key == ' ') {
+        shoot.shootleft = true;
+        shoot.setLocationleft(player.per.x-50, player.per.y-6); //add direction);
+        laserblast.play();
+      }
+    }
+  }
+  enemy.isInContactEnemyfromRight();
+  enemy.isInContactEnemyfromLeft();
+  enemy.isInContactEnemyfromRight2();
+  enemy.isInContactEnemyfromLeft2();
+  enemy.isInContactEnemyfromRight3();
+  enemy.isInContactEnemyfromLeft3();
+  enemy.isEnemyinContactWith1();
+  enemy.isEnemyinContactWith2();
+  enemy.isEnemyinContactWith3();
+  //enemy.isEnemyinContactWith();
   level.display();
   player.health();
   level.levelup();
@@ -378,40 +416,48 @@ void campaign() {
   if (player.lives == 0) {
     gameover.display();
   }
-if (player.per.y < 40){
-player.per.y = -player.ysp;
-player.per.y = -player.vel.y;
-}
-  if (player.per.y >= map.y && player.per.x < map.w && player.per.y < map.y+map.h ) {
+  if (player.per.y < -5) {
+    player.vel.y = -player.vel.y;
+  }
+ if (enemy.health >-5) {
+      if (player.per.y >= map.y-map.h && player.per.x < map.x+map.w) {
         player.vel.y = 0;
-    if (keyPressed){
-      if (keyCode == UP){
-    player.vel.y= -player.ysp;
-    }
-    }
-  }
-    if (player.per.y >= map.y2-map.h2 && player.per.x < map.w2) {
-        player.vel.y = 0;
-    if (keyPressed){
-      if (keyCode == UP){
-    player.vel.y = -player.ysp;
-    }
+        if (up !=0) {
+          player.vel.y= -player.ysp;
+      }
     }
   }
-      if (player.per.y >= map.y3-map.h3 && player.per.x < map.w3) {
-        player.vel.y = 0;
-    if (keyPressed){
-      if (keyCode == UP){
-    player.vel.y = -player.ysp;
-    }
+  
+  if (enemy.health2>-5) {
+    if (player.per.y > map.y2-map.h2 && player.per.x > map.x2 ) {
+        player.vel.y =0;
+              if (up !=0) {
+        player.vel.y = -player.ysp;
+      }
     }
   }
-  if (player.per.x-30>= width) {
-    player.per.x = 0;
+  
+    if (player.per.y >= map.y3-map.h3) {
+      player.vel.y = 0;
+      if (up !=0) {
+        player.vel.y = -player.ysp;
+
+    }
   }
-  if (player.per.x-30<= 0) {
+
+  if (enemy.health <0 && enemy.health2 <0 && enemy.health3 <0) {
+    if (player.per.x-35>= width && player.per.y > height/2) {
+      player.per.x = 0;
+      player.per.y = 0;
+    }
+  } else {
+    if (player.per.x + 40 > width) {
+      player.per.x = width-40;
+    }
+  }
+  if (player.per.x-35<= -1) {
     player.per.x = 35;
-  }
+  } 
   player.vel.x = player.sp * (l + r);
   player.per.add(player.vel);
   if (player.per.y < floor) {
@@ -439,41 +485,59 @@ player.per.y = -player.vel.y;
     player.frameRow = 1;
   } 
   if (level.l == 1) {
-    if (player.sp > 4 || player.sp<1) {
+    if (player.sp > 3 || player.sp<1) {
       player.sp = 2;
     }
   }
   if (level.l == 2) {
-    speedStat = 4;
-    if (player.sp > 8 || player.sp<1) {
-      player.sp = 2;  //add other levels to game
+    speedStat = 2;
+    if (player.sp > 4 || player.sp<1) {
+      player.sp = 2;
     }
-  }
-  if (key == 'p' || key == 'P') {
-    background(100, 100);
-    back = loadImage("BackButton.png");
-    textSize(72);
-    textAlign(CENTER);
-    fill(255);
-    text("Paused", width/2, height/2);
-    textAlign(CENTER);
-    textSize(48);
-    text(" Press Space to Resume", width/2, 600);
-    noFill();
-    rect(rx10, ry10, rw10, rh10);
-    imageMode(CENTER);
-        image(back, 50, 50, 50, 50);
-    if (keyPressed) {
-      if (key == ' ') {
-        stage = 3;
+    if (level.l == 3) {
+      speedStat = 3;
+      if (player.sp > 5 || player.sp<0) {
+        player.sp = 2;
       }
     }
-    if (mousePressed) {
-      if (mouseX > rx10 && mouseX <rx10+rw10 && mouseY > ry10 && mouseY< ry10+rh10) {
-        dream.rewind();
-        dream.pause();
-        full.play();
-        stage = 2;
+    if (level.l == 4) {
+      speedStat = 4;
+      if (player.sp > 6 || player.sp<0) {
+        player.sp = 2;
+      }
+      if (level.l == 5) {
+        speedStat = 5;
+        if (player.sp > 7 || player.sp<-1) {
+          player.sp = 2;
+        }
+      }
+      if (key == 'p' || key == 'P') {
+        background(100, 100);
+        back = loadImage("BackButton.png");
+        textSize(72);
+        textAlign(CENTER);
+        fill(255);
+        text("Paused", width/2, height/2);
+        textAlign(CENTER);
+        textSize(48);
+        text(" Press Space to Resume", width/2, 600);
+        noFill();
+        rect(rx10, ry10, rw10, rh10);
+        imageMode(CENTER);
+        image(back, 75, 75, 50, 50);
+        if (keyPressed) {
+          if (key == ' ') {
+            stage = 3;
+          }
+        }
+        if (mousePressed) {
+          if (mouseX > rx10 && mouseX <rx10+rw10 && mouseY > ry10 && mouseY< ry10+rh10) {
+            dream.rewind();
+            dream.pause();
+            full.play();
+            stage = 2;
+          }
+        }
       }
     }
   }
@@ -493,7 +557,7 @@ void survival() {
   // Our function to return a new smaller crop from the spritesheet.
 
   //enemy.displaysurvival();
-  enemy.isInContactEnemy(player);
+  //enemy.isInContactEnemy();
   player.survivalhealth();
   enemy.enemydissapear();
   if (player.lives == 0) {
@@ -502,7 +566,7 @@ void survival() {
   if (player.per.y >= map.y-map.h && player.per.x < map.w) {
     player.vel.y = 0;
   }
-    if (player.per.y > map.y-map.h) {
+  if (player.per.y > map.y-map.h) {
     player.vel.y += grav;
   } else {
     player.vel.y = 0;
@@ -556,7 +620,7 @@ void survival() {
   if (key == 'p' || key == 'P') {
     background(100, 100);
     back = loadImage("BackButton.png");
-    image(back, 50, 50, 50, 50);
+    image(back, 75, 75, 50, 50);
     textSize(72);
     textAlign(CENTER);
     fill(255);
