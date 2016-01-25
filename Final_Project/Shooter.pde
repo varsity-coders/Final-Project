@@ -39,22 +39,43 @@ class Shooter {
     if (shoot == true) {
       x+=speed;
     }
-    if (enemy.health2 >0){
-     if (x >enemy.x2-35 && y > enemy.y2) {
-      shoot = false;
+    if (enemy.health2 >0) {
+      if (x >enemy.x2-35 && y > enemy.y2) {
+        shoot = false;
+      }
     }
+    if (enemy.health3 >0) {
+      if (x >enemy.x3-35 && y > enemy.y3) {
+        shoot = false;
+      }
     }
+    if (enemy.health >0) {
+      if (x >enemy.x-35 && y > enemy.y) {
+        shoot = false;
+      }
+    }
+  
+}
+void updateleft() { 
+  if (shootleft == true) {
+    x2-=speed2;
   }
-      void updateleft() { 
-    if (shootleft == true) {
-      x2-=speed2;
-    }
-        if (enemy.health2 >0){
-         if (x2 < enemy.x2+35 && y2 > enemy.y2) {
+  if (enemy.health2 >0) {
+    if (x2 < enemy.x2+35 && y2 > enemy.y2) {
       shootleft = false;
     }
   }
-      }
+  if (enemy.health3 >0) {
+    if (x2 < enemy.x3+35 && y2 > enemy.y3) {
+      shootleft = false;
+    }
+  }
+  if (enemy.health >0) {
+    if (x2 < enemy.x+35 && y2 > enemy.y) {
+      shootleft = false;
+    }
+  }
+}
 }
 
 

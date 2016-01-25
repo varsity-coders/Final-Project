@@ -47,11 +47,5 @@ op5 = 255,op6 = 255,op7 = 255,op8 = 255,op9 = 255;
     text("Leveled Up", 700, height - 50);
     op4-=2;
   }
-          if (l==6) {
-    fill(255, 255, 255, op5);
-    textSize(16);
-    text("Leveled Up", 700, height - 50);
-    op5-=2;
-  }
     }
 }

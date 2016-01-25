@@ -9,18 +9,18 @@ class Enemy {
   float health, health2, health3;
   boolean draw, draw2, draw3;
   Enemy() {
-    x = 441;
-    x2 = random(400,580);
-    x3 = 41;
-    picvel = -random(1, 2);
+    x = random(400,560);
+    x2 = random(440,960);
+    x3 = random(400,560);
+    picvel = -random(0.5, 2);
     picvel2 = random(1, 2);
-    picvel3 = random(1, 2);
-    y = height/2-55;
-    y2 =height/2-255;
+    picvel3 = random(1, 2.5);
+    y = height/2-255;
+    y2 =height/2-55;
     y3 = height/2+145;
-    health = 20;
-    health2 = 20;
-    health3 = 20;
+    health = 15;
+    health2 = 30;
+    health3 = 45;
     image  = loadImage("enemy.png");
     draw=true;
     draw2=true;
@@ -28,7 +28,9 @@ class Enemy {
   }
 
   void displaylvl1() {
-    println(health2);
+          println(enemy.health);
+                println(enemy.health2);
+      println(enemy.health3);
     if  (draw==true) {
       image(image, x, y);
     }
@@ -41,19 +43,19 @@ class Enemy {
     x += picvel;
     x2 += picvel2;
     x3 += picvel3;
-    if (x+40>= width) {
+    if (x+40>= 600) {
       picvel*=-1;
     }
-    if (x-40<=400) {
+    if (x-40<=0) {
       picvel*=-1;
     }
-    if (x2+40>= 600) {
+    if (x2+40>= width) {
       picvel2*=-1;
     }
-    if (x2-40<=0) {
+    if (x2-40<=400) {
       picvel2*=-1;
     }
-    if (x3+40>= 600) {
+    if (x3+40>= width) {
       picvel3*=-1;
     }
     if (x3-40<=0) {
@@ -173,13 +175,13 @@ class Enemy {
 
   void enemydissapear() {
     if (health == 0) {
-      level.xp+=40;
+      level.xp+=60;
     }
         if (health2 == 0) {
-      level.xp+=40;
+      level.xp+=80;
     }
         if (health3 == 0) {
-      level.xp+=40;
+      level.xp+=100;
     }
   }
   void displaysurvival() {
