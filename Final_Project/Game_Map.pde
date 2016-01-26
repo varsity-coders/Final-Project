@@ -32,7 +32,7 @@ class Map {
 
   //float x7 = 4, y7 = height/2, w7 = 990, h7 = 80;
   void display() {
-    background(100);
+    background(150);
     stroke(0);
     strokeWeight(12);
     fill(255);
@@ -60,7 +60,7 @@ class Map {
     }
   }
   void displayBOSS () {
-    background(100);
+    background(0);
     stroke(0);
     strokeWeight(12);
     fill(255);

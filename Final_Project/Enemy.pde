@@ -89,10 +89,10 @@ class Enemy {
     x4 += picvel4;
     x5 += picvel5;
     x6 += picvel6;
-    if (x4+40>= width || x4-40<=0) {
+    if (x4+40>= width || x4-40<=400) {
       picvel4*=-1;
     }
-    if (x5+40>= width || x5-40<=0) {
+    if (x5+40>= 700 || x5-40<=0) {
       picvel5*=-1;
     }
 

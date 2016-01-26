@@ -392,15 +392,23 @@ void campaign() {
   dream.play();
   //campaignbackground = loadImage("campaign.png");
   //image(campaignbackground, 1000,800);
-    if (nextlevel==1) {
+  if (nextlevel==1) {
     map.display2();
-        shoot.updateleftlvl2();
-    shoot.updaterightlvl2();
-    shoot.displayright();
-    shoot.displayleft();
     enemy.displaylvl2();
     enemy.updatelvl2();
+    //shoot.updateleftlvl2();
+    //shoot.updaterightlvl2();
     enemy.enemydissapearlvl2();
+    if (enemy.health4 > -2) {
+      if (player.per.y >= map.y4-map.h4-10 &&  player.per.x > map.x4) {
+        player.vel.y = 0;
+      if (up !=0) {
+        player.vel.y= -player.ysp;
+      }
+      }else if (player.per.y>=map.y-map.h4 && player.per.x > map.x4) {
+        player.vel.y += grav-0.1;
+      }
+    }
     if (enemy.health4 <0 && enemy.health5 <0 && enemy.health6 <0) {
       if (player.per.x-35>= width && player.per.y > height/2) {
         nextlevel = 2;
@@ -413,12 +421,10 @@ void campaign() {
       }
     }
   }
-  if (nextlevel ==2) {
+  if (nextlevel == 2) {
     map.display();
     shoot.updateleftlvl1();
     shoot.updaterightlvl1();
-    shoot.displayright();
-    shoot.displayleft();
     enemy.displaylvl1();
     enemy.updatelvl1();
     enemy.enemydissapearlvl1();
@@ -469,21 +475,23 @@ void campaign() {
       }
     }
   }
-    if (nextlevel==3) {
+  if (nextlevel==3) {
     map.displayBOSS();
   }
   pushMatrix();
   imageMode(CENTER);
-        translate(player.per.x, player.per.y);
+  translate(player.per.x, player.per.y);
   PImage frameImage = getSubImage(player.image, player.frameRow, player.frameColumn, 100, 105);
   // Draw this image instead of player.image
-  image(frameImage, player.xpos, 0);
+  image(frameImage, 0, 0);
   popMatrix();
   // This function  returns a new smaller crop from the spritesheet.
   level.display();
   player.health();
   level.levelup();
   player.loselife();
+  shoot.displayright();
+  shoot.displayleft();
   if (r!=0) {
     if (keyPressed) {
       if (key == ' ') {
@@ -617,7 +625,6 @@ void survival() {
   image(frameImagered, 0, 0);
   popMatrix();
   // Our function to return a new smaller crop from the spritesheet.
-
   //enemy.displaysurvival();
   //enemy.isInContactEnemy();
   player.survivalhealth();

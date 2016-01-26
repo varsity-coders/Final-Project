@@ -3,7 +3,6 @@ class Sprite {
   PImage imagered;
   PImage life;
   PVector per;
-  float xpos,ypos;
   int frameRow;
   int frameColumn;
   float frameTime;
@@ -20,15 +19,13 @@ class Sprite {
     image = loadImage("sprites.png");
     imagered = loadImage("spritesred.png");
     life = loadImage("lives.png");
-    per = new PVector(xpos, ypos);
+    per = new PVector(920, 0);
     vel = new PVector(2, 10);
     frameRow = 0; 
     frameColumn = 0; 
     frameTime = 0;
     sp = 2;
     ysp = 15;
-    xpos = 910;
-    ypos = 10;
   }
   void health() {
     noStroke();

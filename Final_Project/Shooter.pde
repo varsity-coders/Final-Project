@@ -26,7 +26,7 @@ class Shooter {
     shootleft = true;
   }
   void displayright() {
-    if (shoot == true) {
+    if (shoot == true) { //could display bigger blast when leveling up and reaching boss
       image(blastblue, x, y);
     }
   }
@@ -77,22 +77,22 @@ void updateleftlvl1() {
   }
 }
 
-  void updaterightlvl2() { 
+ /* void updaterightlvl2() { 
     if (shoot == true) {
       x+=speed;
     }
-    if (enemy.health2 >0) {
-      if (x >enemy.x2-35 && y > enemy.y2) {
+    if (enemy.health4 >0) {
+      if (x >enemy.x4-35 && y > enemy.y4) {
         shoot = false;
       }
     }
-    if (enemy.health3 >0) {
-      if (x >enemy.x3-35 && y > enemy.y3) {
+    if (enemy.health5 >0) {
+      if (x >enemy.x5-35 && y > enemy.y5) {
         shoot = false;
       }
     }
-    if (enemy.health >0) {
-      if (x >enemy.x-35 && y > enemy.y) {
+    if (enemy.health6 >0) {
+      if (x >enemy.x6-35 && y > enemy.y6) {
         shoot = false;
       }
     }  
@@ -117,4 +117,5 @@ void updateleftlvl2() {
     }
   }
 }
+*/
 }
