@@ -12,7 +12,7 @@ class Sprite {
   float ysp;
   int health =400;
     int health2 =800;
-  int lives =5;                //change to 3 and add life ups
+  int lives = 3;                //change to 3 and add life ups
   float a =800, d=800;
   int extralives;
 
@@ -27,7 +27,7 @@ class Sprite {
     frameTime = 0;
     sp = 2;
     ysp = 15;
-    xpos = 0;
+    xpos = 910;
     ypos = 10;
   }
   void health() {

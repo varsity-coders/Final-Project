@@ -35,7 +35,7 @@ float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, c, z, d, rw4,
   rx6, ry9, rh4, rw9, rx10, rw10, ry10, rh10, rx11, rw11, ry11, rh11;
 PImage zig, dreams, back, load, campaignbackground;
 PFont cool;
-float loadx, loadw, loadfill, stage, newstage;
+float loadx, loadw, loadfill, stage, newstage, nextlevel;
 float customtime = 1;
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
@@ -51,6 +51,7 @@ void setup() {
   y = height/2;
   loadx = 0;
   loadw = 10;
+  nextlevel = 1;
   vy = 5;
   vy = 5;
   stage=3;
@@ -391,26 +392,103 @@ void campaign() {
   dream.play();
   //campaignbackground = loadImage("campaign.png");
   //image(campaignbackground, 1000,800);
-  map.display();
-  enemy.displaylvl1();
+    if (nextlevel==1) {
+    map.display2();
+        shoot.updateleftlvl2();
+    shoot.updaterightlvl2();
+    shoot.displayright();
+    shoot.displayleft();
+    enemy.displaylvl2();
+    enemy.updatelvl2();
+    enemy.enemydissapearlvl2();
+    if (enemy.health4 <0 && enemy.health5 <0 && enemy.health6 <0) {
+      if (player.per.x-35>= width && player.per.y > height/2) {
+        nextlevel = 2;
+        player.per.x = 0;
+        player.per.y = 0;
+      }
+    } else {
+      if (player.per.x + 40 > width) {
+        player.per.x = width-40;
+      }
+    }
+  }
+  if (nextlevel ==2) {
+    map.display();
+    shoot.updateleftlvl1();
+    shoot.updaterightlvl1();
+    shoot.displayright();
+    shoot.displayleft();
+    enemy.displaylvl1();
+    enemy.updatelvl1();
+    enemy.enemydissapearlvl1();
+    enemy.isInContactEnemyfromRight();
+    enemy.isInContactEnemyfromLeft();
+    enemy.isInContactEnemyfromRight2();
+    enemy.isInContactEnemyfromLeft2();
+    enemy.isInContactEnemyfromRight3();
+    enemy.isInContactEnemyfromLeft3();
+    enemy.isEnemyinContactWith1();
+    enemy.isEnemyinContactWith2();
+    enemy.isEnemyinContactWith3();
+    if (enemy.health >-2) {
+      if (player.per.y >= map.y-map.h && player.per.x < map.w) {
+        player.vel.y = 0;
+        if (up !=0) {
+          player.vel.y= -player.ysp;
+        }
+      } else if (player.per.y>map.h && player.per.x< 600) {
+        player.vel.y += grav;
+      }
+    }
+    if (enemy.health2>-2) {
+      if (player.per.y > map.y2-map.h2 && player.per.x > map.x2 ) {
+        player.vel.y =0;
+        if (up !=0) {
+          player.vel.y = -player.ysp;
+        }
+      }
+    }
+
+    if (player.per.y >= map.y3-map.h3) {
+      player.vel.y = 0;
+      if (up !=0) {
+        player.vel.y = -player.ysp;
+      }
+    }
+
+    if (enemy.health <0 && enemy.health2 <0 && enemy.health3 <0) {
+      if (player.per.x-35>= width && player.per.y > height/2) {
+        nextlevel = 3;
+        player.per.x = 760;
+        player.per.y = 0;
+      }
+    } else {
+      if (player.per.x + 40 > width) {
+        player.per.x = width-40;
+      }
+    }
+  }
+    if (nextlevel==3) {
+    map.displayBOSS();
+  }
   pushMatrix();
-  translate(player.per.x, player.per.y);
   imageMode(CENTER);
+        translate(player.per.x, player.per.y);
   PImage frameImage = getSubImage(player.image, player.frameRow, player.frameColumn, 100, 105);
   // Draw this image instead of player.image
-  image(frameImage, 0, 0);
+  image(frameImage, player.xpos, 0);
   popMatrix();
   // This function  returns a new smaller crop from the spritesheet.
-  enemy.updatelvl1();
-  shoot.updateleft();
-  shoot.updateright();
-  shoot.displayright();
-  shoot.displayleft();
+  level.display();
+  player.health();
+  level.levelup();
+  player.loselife();
   if (r!=0) {
     if (keyPressed) {
       if (key == ' ') {
         shoot.shoot = true;
-        shoot.setLocationright(player.per.x+50, player.per.y-6); //add direction);
+        shoot.setLocationright(player.per.x+50, player.per.y-6);
         laserblast.play();
       }
     }
@@ -419,67 +497,18 @@ void campaign() {
     if (keyPressed) {
       if (key == ' ') {
         shoot.shootleft = true;
-        shoot.setLocationleft(player.per.x-50, player.per.y-6); //add direction);
+        shoot.setLocationleft(player.per.x-50, player.per.y-6);
         laserblast.play();
       }
     }
   }
-  enemy.isInContactEnemyfromRight();
-  enemy.isInContactEnemyfromLeft();
-  enemy.isInContactEnemyfromRight2();
-  enemy.isInContactEnemyfromLeft2();
-  enemy.isInContactEnemyfromRight3();
-  enemy.isInContactEnemyfromLeft3();
-  enemy.isEnemyinContactWith1();
-  enemy.isEnemyinContactWith2();
-  enemy.isEnemyinContactWith3();
-  level.display();
-  player.health();
-  level.levelup();
-  enemy.enemydissapear();
-  player.loselife();
   if (player.lives == 0) {
     newstage = 6;
   }
   if (player.per.y < -2) {
     player.vel.y = -player.vel.y;
   }
-  if (enemy.health >-2) {
-    if (player.per.y >= map.y-map.h && player.per.x < map.w) {
-      player.vel.y = 0;
-      if (up !=0) {
-        player.vel.y= -player.ysp;
-      }
-    }else if (player.per.y>map.h && player.per.x< 600){
-          player.vel.y += grav;
-  }
-  }
-  if (enemy.health2>-2) {
-    if (player.per.y > map.y2-map.h2 && player.per.x > map.x2 ) {
-      player.vel.y =0;
-      if (up !=0) {
-        player.vel.y = -player.ysp;
-      }
-    }
-  }
 
-  if (player.per.y >= map.y3-map.h3) {
-    player.vel.y = 0;
-    if (up !=0) {
-      player.vel.y = -player.ysp;
-    }
-  }
-
-  if (enemy.health <0 && enemy.health2 <0 && enemy.health3 <0) {
-    if (player.per.x-35>= width && player.per.y > height/2) {
-      player.per.x = 0;
-      player.per.y = 0;
-    }
-  } else {
-    if (player.per.x + 40 > width) {
-      player.per.x = width-40;
-    }
-  }
   if (player.per.x-35<= -1) {
     player.per.x = 35;
   } 
@@ -516,157 +545,165 @@ void campaign() {
   }
   if (level.l == 2) {
     speedStat = 2;
+    shoot.speed = 5;
+    shoot.speed2 = 5;
     if (player.sp > 4 || player.sp<1) {
       player.sp = 2;
     }
   }
-    if (level.l == 3) {
-      speedStat = 3;
-      if (player.sp > 5 || player.sp<0) {
-        player.sp = 2;
+  if (level.l == 3) {
+    speedStat = 3;
+    shoot.speed = 6;
+    shoot.speed2 = 6;
+    if (player.sp > 5 || player.sp<0) {
+      player.sp = 2;
+    }
+  }
+  if (level.l == 4) {
+    speedStat = 4;
+    shoot.speed = 7;
+    shoot.speed2 = 7;
+    if (player.sp > 6 || player.sp<0) {
+      player.sp = 2;
+    }
+  }
+  if (level.l == 5) {
+    speedStat = 5;
+    shoot.speed = 8;
+    shoot.speed2 = 8;
+    if (player.sp > 7 || player.sp<-1) {
+      player.sp = 2;
+    }
+  }
+  if (key == 'p' || key == 'P') {
+    background(100, 100);
+    back = loadImage("BackButton.png");
+    textSize(72);
+    textAlign(CENTER);
+    fill(255);
+    text("Paused", width/2, height/2);
+    textAlign(CENTER);
+    textSize(48);
+    text(" Press Space to Resume", width/2, 600);
+    noFill();
+    rect(rx10, ry10, rw10, rh10);
+    imageMode(CENTER);
+    image(back, 75, 75, 50, 50);
+    if (keyPressed) {
+      if (key == ' ') {
+        stage = 3;
       }
     }
-    if (level.l == 4) {
-      speedStat = 4;
-      if (player.sp > 6 || player.sp<0) {
-        player.sp = 2;
-      }
+  }
+  if (mousePressed) {
+    if (mouseX > rx10 && mouseX <rx10+rw10 && mouseY > ry10 && mouseY< ry10+rh10) {
+      dream.rewind();
+      dream.pause();
+      full.play();
+      stage = 2;
     }
-    if (level.l == 5) {
-      speedStat = 5;
-      if (player.sp > 7 || player.sp<-1) {
-        player.sp = 2;
-      }
+  }
+}
+
+void survival() {  
+  night.play();
+  //map.survival();
+
+  pushMatrix();
+  translate(player.per.x, player.per.y);
+  imageMode(CENTER);
+  PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
+  // Draw this image instead of player.image
+  image(frameImagered, 0, 0);
+  popMatrix();
+  // Our function to return a new smaller crop from the spritesheet.
+
+  //enemy.displaysurvival();
+  //enemy.isInContactEnemy();
+  player.survivalhealth();
+  enemy.enemydissapearlvl1();
+  if (player.lives == 0) {
+    newstage = 7;
+  }
+  if (player.per.y >= map.y-map.h && player.per.x < map.w) {
+    player.vel.y = 0;
+  }
+  if (player.per.y > map.y-map.h) {
+    player.vel.y += grav;
+  } else {
+    player.vel.y = 0;
+  }
+  if (player.per.y >= floor && up != 0) {
+    player.vel.y = -player.ysp;
+  }
+  if (player.per.x-30>= width) {
+    player.per.x = 0;
+  }
+  if (player.per.x-30<= 0) {
+    player.per.x = 35;
+  }
+  player.vel.x = player.sp * (l + r);
+  player.per.add(player.vel);
+  if (player.per.y < floor) {
+    player.vel.y += grav;
+  } else {
+    player.vel.y = 0;
+  }
+  if (player.per.y >= floor && up != 0) {
+    player.vel.y = -player.ysp;
+  }
+  player.frameTime += .25; 
+  if (player.frameTime >= 8) { 
+    player.frameTime = 1;
+  }
+  player.frameColumn = (int)player.frameTime;
+
+  if (player.vel.x == 0 && player.vel.y == 0) {
+    player.frameColumn = 0;
+  }
+
+  if (l != 0) {
+    player.frameRow = 0;
+  }
+  if (r != 0) {
+    player.frameRow = 1;
+  } 
+  if (level.l == 1) {
+    if (player.sp > 4 || player.sp<1) {
+      player.sp = 2;
     }
-    if (key == 'p' || key == 'P') {
-      background(100, 100);
-      back = loadImage("BackButton.png");
-      textSize(72);
-      textAlign(CENTER);
-      fill(255);
-      text("Paused", width/2, height/2);
-      textAlign(CENTER);
-      textSize(48);
-      text(" Press Space to Resume", width/2, 600);
-      noFill();
-      rect(rx10, ry10, rw10, rh10);
-      imageMode(CENTER);
-      image(back, 75, 75, 50, 50);
-      if (keyPressed) {
-        if (key == ' ') {
-          stage = 3;
-        }
+  }
+  if (level.l == 2) {
+    speedStat = 4;
+    if (player.sp > 8 || player.sp<1) {
+      player.sp = 2;  //add other levels to game
+    }
+  }
+  if (key == 'p' || key == 'P') {
+    background(100, 100);
+    back = loadImage("BackButton.png");
+    image(back, 75, 75, 50, 50);
+    textSize(72);
+    textAlign(CENTER);
+    fill(255);
+    text("Paused", width/2, height/2);
+    textAlign(CENTER);
+    textSize(48);
+    text(" Press Space to Resume", width/2, 600);
+    noFill();
+    rect(rx11, ry11, rw11, rh11);
+    if (keyPressed) {
+      if (key == ' ') {
+        stage = 4;
       }
     }
     if (mousePressed) {
-      if (mouseX > rx10 && mouseX <rx10+rw10 && mouseY > ry10 && mouseY< ry10+rh10) {
-        dream.rewind();
-        dream.pause();
+      if (mouseX > rx11 && mouseX<rx11+rw11 && mouseY > ry11 && mouseX< ry11+rh11) {
+        night.rewind();
+        night.pause();
         full.play();
         stage = 2;
       }
     }
   }
-
-  void survival() {  
-    night.play();
-    map.survival();
-
-    pushMatrix();
-    translate(player.per.x, player.per.y);
-    imageMode(CENTER);
-    PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
-    // Draw this image instead of player.image
-    image(frameImagered, 0, 0);
-    popMatrix();
-    // Our function to return a new smaller crop from the spritesheet.
-
-    //enemy.displaysurvival();
-    //enemy.isInContactEnemy();
-    player.survivalhealth();
-    enemy.enemydissapear();
-    if (player.lives == 0) {
-      newstage = 7;
-    }
-    if (player.per.y >= map.y-map.h && player.per.x < map.w) {
-      player.vel.y = 0;
-    }
-    if (player.per.y > map.y-map.h) {
-      player.vel.y += grav;
-    } else {
-      player.vel.y = 0;
-    }
-    if (player.per.y >= floor && up != 0) {
-      player.vel.y = -player.ysp;
-    }
-    if (player.per.x-30>= width) {
-      player.per.x = 0;
-    }
-    if (player.per.x-30<= 0) {
-      player.per.x = 35;
-    }
-    player.vel.x = player.sp * (l + r);
-    player.per.add(player.vel);
-    if (player.per.y < floor) {
-      player.vel.y += grav;
-    } else {
-      player.vel.y = 0;
-    }
-    if (player.per.y >= floor && up != 0) {
-      player.vel.y = -player.ysp;
-    }
-    player.frameTime += .25; 
-    if (player.frameTime >= 8) { 
-      player.frameTime = 1;
-    }
-    player.frameColumn = (int)player.frameTime;
-
-    if (player.vel.x == 0 && player.vel.y == 0) {
-      player.frameColumn = 0;
-    }
-
-    if (l != 0) {
-      player.frameRow = 0;
-    }
-    if (r != 0) {
-      player.frameRow = 1;
-    } 
-    if (level.l == 1) {
-      if (player.sp > 4 || player.sp<1) {
-        player.sp = 2;
-      }
-    }
-    if (level.l == 2) {
-      speedStat = 4;
-      if (player.sp > 8 || player.sp<1) {
-        player.sp = 2;  //add other levels to game
-      }
-    }
-    if (key == 'p' || key == 'P') {
-      background(100, 100);
-      back = loadImage("BackButton.png");
-      image(back, 75, 75, 50, 50);
-      textSize(72);
-      textAlign(CENTER);
-      fill(255);
-      text("Paused", width/2, height/2);
-      textAlign(CENTER);
-      textSize(48);
-      text(" Press Space to Resume", width/2, 600);
-      noFill();
-      rect(rx11, ry11, rw11, rh11);
-      if (keyPressed) {
-        if (key == ' ') {
-          stage = 4;
-        }
-      }
-      if (mousePressed) {
-        if (mouseX > rx11 && mouseX<rx11+rw11 && mouseY > ry11 && mouseX< ry11+rh11) {
-          night.rewind();
-          night.pause();
-          full.play();
-          stage = 2;
-        }
-      }
-    }
-  }
+}

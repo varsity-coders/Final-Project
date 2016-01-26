@@ -2,8 +2,7 @@ class Levels {
   int l = 1;
   int xp = 0;
   float o = 255;
-  float op1 = 255,op2 = 255,op3 = 255,op4 = 255,
-op5 = 255,op6 = 255,op7 = 255,op8 = 255,op9 = 255;
+  float op1 = 255,op2 = 255,op3 = 255,op4 = 255;
   void display() {
     noStroke();
     fill(0, 112, 186);
@@ -13,13 +12,13 @@ op5 = 255,op6 = 255,op7 = 255,op8 = 255,op9 = 255;
     text("XP:"+xp, 20, height-50);
     fill(255);
     textSize(22);
-    text("Level:" + l, 700, height-25); //change just for testing  
+    text("Level:" + l, 700, height-25);
       if (xp >200) {
         xp = 0;
         l+=1;
       }
-      if (l>6){
-        l = 6;
+      if (l>5){
+        l = 5;
       }
     }
     void levelup(){
