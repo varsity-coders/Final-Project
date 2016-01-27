@@ -54,7 +54,7 @@ void setup() {
   nextlevel = 1;
   vy = 5;
   vy = 5;
-  stage=3;
+  stage=1;
   newstage = 0;
   rh=50;
   rw1=990;
@@ -392,25 +392,51 @@ void campaign() {
   dream.play();
   //campaignbackground = loadImage("campaign.png");
   //image(campaignbackground, 1000,800);
+  println(enemy.health4);
+    println(enemy.health5);
+      println(enemy.bosshealth);
   if (nextlevel==1) {
     map.display2();
     enemy.displaylvl2();
     enemy.updatelvl2();
-    //shoot.updateleftlvl2();
-    //shoot.updaterightlvl2();
+    shoot.updateleftlvl2();
+    shoot.updaterightlvl2();
     enemy.enemydissapearlvl2();
+    enemy.isInContactEnemyfromRight4();
+    enemy.isInContactEnemyfromLeft4();
+    enemy.isInContactEnemyfromRight5();
+    enemy.isInContactEnemyfromLeft5();
+    enemy.isInContactEnemyfromRight6();
+    enemy.isInContactEnemyfromLeft6();
+    enemy.isEnemyinContactWith4();
+    enemy.isEnemyinContactWith5();
+    enemy.isEnemyinContactWith6();
     if (enemy.health4 > -2) {
       if (player.per.y >= map.y4-map.h4-10 &&  player.per.x > map.x4) {
         player.vel.y = 0;
-      if (up !=0) {
-        player.vel.y= -player.ysp;
-      }
-      }else if (player.per.y>=map.y-map.h4 && player.per.x > map.x4) {
+        if (up !=0) {
+          player.vel.y= -player.ysp;
+        }
+      } else if (player.per.y>=map.y-map.h4 && player.per.x > map.x4) {
         player.vel.y += grav-0.1;
       }
     }
+    if (enemy.health5 > -2) {
+      if (player.per.y >= map.y5-map.h5 && player.per.x < map.w5) {
+        player.vel.y = 0;
+              if (up !=0) {
+        player.vel.y = -player.ysp;
+      }
+      }
+    }
+    if (player.per.y >= map.y6-map.h6){
+            player.vel.y = 0;
+      if (up !=0) {
+        player.vel.y = -player.ysp;
+      }
+    }
     if (enemy.health4 <0 && enemy.health5 <0 && enemy.health6 <0) {
-      if (player.per.x-35>= width && player.per.y > height/2) {
+      if (player.per.x+35<= 0 && player.per.y > height/2) {
         nextlevel = 2;
         player.per.x = 0;
         player.per.y = 0;
@@ -466,7 +492,7 @@ void campaign() {
     if (enemy.health <0 && enemy.health2 <0 && enemy.health3 <0) {
       if (player.per.x-35>= width && player.per.y > height/2) {
         nextlevel = 3;
-        player.per.x = 760;
+        player.per.x = 0;
         player.per.y = 0;
       }
     } else {
@@ -477,6 +503,19 @@ void campaign() {
   }
   if (nextlevel==3) {
     map.displayBOSS();
+        enemy.bossdisplay();
+    enemy.updateboss();
+    enemy.isBOSSinContactWith();
+    enemy.isInContactBOSSfromRight();
+    enemy.isInContactBOSSfromLeft();
+    shoot.updateBOSSright();
+    shoot.updateBOSSleft();
+    if (player.per.y >= map.yBOSS-54){
+           player.vel.y = 0;
+      if (up !=0) {
+        player.vel.y = -player.ysp;
+      }
+    }
   }
   pushMatrix();
   imageMode(CENTER);
@@ -555,6 +594,7 @@ void campaign() {
     speedStat = 2;
     shoot.speed = 5;
     shoot.speed2 = 5;
+    shoot.powerstat = 2;
     if (player.sp > 4 || player.sp<1) {
       player.sp = 2;
     }
@@ -563,6 +603,7 @@ void campaign() {
     speedStat = 3;
     shoot.speed = 6;
     shoot.speed2 = 6;
+        shoot.powerstat = 3;
     if (player.sp > 5 || player.sp<0) {
       player.sp = 2;
     }
@@ -571,6 +612,7 @@ void campaign() {
     speedStat = 4;
     shoot.speed = 7;
     shoot.speed2 = 7;
+        shoot.powerstat = 4;
     if (player.sp > 6 || player.sp<0) {
       player.sp = 2;
     }
@@ -579,6 +621,7 @@ void campaign() {
     speedStat = 5;
     shoot.speed = 8;
     shoot.speed2 = 8;
+        shoot.powerstat = 5;
     if (player.sp > 7 || player.sp<-1) {
       player.sp = 2;
     }
@@ -611,6 +654,7 @@ void campaign() {
       stage = 2;
     }
   }
+      enemy.bossdissapear();
 }
 
 void survival() {  

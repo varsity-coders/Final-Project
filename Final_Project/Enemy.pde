@@ -1,5 +1,5 @@
 class Enemy {
-  PImage image, imagered;
+  PImage image, imagered, boss;
   float x, y; 
   float picvel;
   float x2, y2;
@@ -14,8 +14,10 @@ class Enemy {
   float x6, y6; 
   float picvel6;
   float health4, health5, health6;
+  float xboss, yboss, bossvel, bosshealth;
   boolean draw, draw2, draw3;
   boolean draw4, draw5, draw6;
+  boolean drawboss;
   Enemy() {
     x = random(400, 560);
     x2 = random(440, 960);
@@ -48,6 +50,11 @@ class Enemy {
     draw4=true;
     draw5=true;
     draw6=true;
+    xboss = 800;
+    yboss = 353;
+    bossvel = 4;
+    bosshealth = 100;
+    drawboss = true;
   }
 
   void displaylvl1() {
@@ -122,9 +129,14 @@ class Enemy {
       draw6 = false;
     }
   }
+  void updateboss() {
+    if (bosshealth <= 0) {
+      drawboss = false;
+    }
+  }
   boolean isInContactEnemyfromRight() { 
     if ( dist(x, y, shoot.x, shoot.y) < 10) { 
-      health -=1;
+      health -=shoot.powerstat;
       if (health < 1 ) {
         draw = false;
       }
@@ -135,7 +147,7 @@ class Enemy {
   }
   boolean isInContactEnemyfromRight2() { 
     if ( dist(x2, y2, shoot.x, shoot.y) < 10) { 
-      health2 -=1;
+      health2 -=shoot.powerstat;
       if (health2 < 1 ) {
         draw2 = false;
       }
@@ -146,7 +158,7 @@ class Enemy {
   }
   boolean isInContactEnemyfromRight3() { 
     if ( dist(x3, y3, shoot.x, shoot.y) < 10) { 
-      health3 -=1;
+      health3 -=shoot.powerstat;
       if (health3 < 1 ) {
         draw3 = false;
       }
@@ -157,7 +169,7 @@ class Enemy {
   }
   boolean isInContactEnemyfromLeft() { 
     if ( dist(x, y, shoot.x2, shoot.y2) < 10) { 
-      health -=1;
+      health -=shoot.powerstat;
       if (health < 1 ) {
         draw = false;
       }
@@ -168,7 +180,7 @@ class Enemy {
   }
   boolean isInContactEnemyfromLeft2() { 
     if ( dist(x2, y2, shoot.x2, shoot.y2) < 10) { 
-      health2 -=1;
+      health2 -=shoot.powerstat;
       if (health2 < 1 ) {
         draw2 = false;
       }
@@ -179,7 +191,7 @@ class Enemy {
   }
   boolean isInContactEnemyfromLeft3() { 
     if ( dist(shoot.x2, shoot.y2, x3, y3) < 10) { 
-      health3 -=1;
+      health3 -=shoot.powerstat;
       if (health3 < 1 ) {
         draw3 = false;
       }
@@ -219,33 +231,193 @@ class Enemy {
     }
   }
   void bossdisplay() {
+    boss = loadImage("BOSS.png");
+    if (drawboss == true) {
+      image(boss, xboss, yboss);
+    }
+    xboss += bossvel;
+    if (xboss+100>= width || xboss-100<=0) {
+      bossvel*=-1;
+    }
   }
-
+  boolean isBOSSinContactWith() {
+    if (bosshealth >= 0) {
+      if ( dist(player.per.x, player.per.y, xboss, yboss+50) < 70) { 
+        player.health -=2;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isInContactBOSSfromRight() { 
+    if ( dist(xboss, yboss+50, shoot.x, shoot.y) < 40) { 
+      bosshealth -= shoot.powerstat;
+      if (bosshealth < 1 ) {
+        drawboss = false;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isInContactBOSSfromLeft() { 
+    if ( dist(xboss, yboss+50, shoot.x2, shoot.y2) < 40) { 
+      bosshealth -=shoot.powerstat;
+      if (bosshealth < 1 ) {
+        drawboss = false;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
   void enemydissapearlvl1() {
     if (health == 0) {
       level.xp+=60;
+      picvel = 0;
     }
     if (health2 == 0) {
       level.xp+=80;
+      picvel2 = 9;
     }
     if (health3 == 0) {
       level.xp+=100;
       player.lives+=1;
+      picvel3 = 0;
     }
   }
   void enemydissapearlvl2() {
     if (health4 == 0) {
       level.xp+=80;
+      picvel4 = 0;
     }
     if (health5 == 0) {
       level.xp+=100;
+      picvel5 = 0;
     }
     if (health6 == 0) {
       level.xp+=120;
+      picvel6 = 0;
+    }
+  }
+  void bossdissapear() {
+    if (bosshealth == 0) {
+      background(0);
+      fill(255);
+      textAlign(CENTER);
+      textSize(32);
+      text("YOU BEAT CAMPAIGN Mode!", width/2, height/2);
+      text("Now go test yourself in Survival Mode", width/2, height/2+100);
+      if (keyPressed){
+        if (key == ' '){
+          stage = 2;
+        }
+      }
     }
   }
   void displaysurvival() {
     imagered = loadImage("enemyred.png");
     //enemydefeat
+  }
+
+
+
+
+  boolean isInContactEnemyfromRight4() { 
+    if ( dist(x4, y4, shoot.x, shoot.y) < 10) { 
+      health4 -=shoot.powerstat;
+      if (health4 < 1 ) {
+        draw4 = false;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isInContactEnemyfromRight5() { 
+    if ( dist(x5, y5, shoot.x, shoot.y) < 10) { 
+      health5 -=shoot.powerstat;
+      if (health5 < 1 ) {
+        draw5 = false;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isInContactEnemyfromRight6() { 
+    if ( dist(x6, y6, shoot.x, shoot.y) < 10) { 
+      health6 -=shoot.powerstat;
+      if (health6 < 1 ) {
+        draw6 = false;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isInContactEnemyfromLeft4() { 
+    if ( dist(x4, y4, shoot.x2, shoot.y2) < 10) { 
+      health4 -=shoot.powerstat;
+      if (health4 < 1 ) {
+        draw4 = false;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isInContactEnemyfromLeft5() { 
+    if ( dist(x5, y5, shoot.x2, shoot.y2) < 10) { 
+      health5 -=shoot.powerstat;
+      if (health5 < 1 ) {
+        draw5 = false;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isInContactEnemyfromLeft6() { 
+    if ( dist(shoot.x, shoot.y2, x6, y6) < 10) { 
+      health6 -=shoot.powerstat;
+      if (health6 < 1 ) {
+        draw6 = false;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isEnemyinContactWith4() {
+    if (health4 >= 0) {
+      if ( dist(player.per.x, player.per.y, x4, y4) < 70) { 
+        player.health -=2;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isEnemyinContactWith5() {
+    if (health5 >= 0) {
+      if ( dist(player.per.x, player.per.y, x5, y5) < 70) { 
+        player.health -=2;
+      }
+      return true;
+    } else {      
+      return false;
+    }
+  }
+  boolean isEnemyinContactWith6() {
+    if (health6 >= 0) {
+      if ( dist(player.per.x, player.per.y, x6, y6) < 70) { 
+        player.health -=2;
+      }
+      return true;
+    } else {      
+      return false;
+    }
   }
 }

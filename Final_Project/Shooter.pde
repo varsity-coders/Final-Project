@@ -1,6 +1,6 @@
 class Shooter {
   float x, y, d, x2, y2, d2;
-  float speed, speed2;
+  float speed, speed2,powerstat;
   boolean shoot, shootleft;
   PImage blastblue, blast;
   PImage blastblueleft, blastleft;
@@ -8,6 +8,7 @@ class Shooter {
     shoot = false;
     speed = 4;
     speed2 = 4;
+    powerstat = 1;
     blast = loadImage("blast.png");
     blastleft = loadImage("blast2.png");
     blastblue = loadImage("blastblue.png");
@@ -77,7 +78,7 @@ void updateleftlvl1() {
   }
 }
 
- /* void updaterightlvl2() { 
+  void updaterightlvl2() { 
     if (shoot == true) {
       x+=speed;
     }
@@ -117,5 +118,24 @@ void updateleftlvl2() {
     }
   }
 }
-*/
+void updateBOSSleft(){
+    if (shootleft == true) {
+    x2-=speed2;
+  }
+    if (enemy.bosshealth >0) {
+    if (x2 < enemy.xboss+40 && y2 > enemy.yboss) {
+      shootleft = false;
+    }
+  }
+}
+void updateBOSSright(){
+     if (shoot == true) {
+      x+=speed;
+    }
+        if (enemy.bosshealth >0) {
+      if (x >enemy.xboss-40 && y > enemy.yboss) {
+        shoot = false;
+      }
+    } 
+}
 }

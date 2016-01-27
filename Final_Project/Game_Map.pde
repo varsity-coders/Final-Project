@@ -60,10 +60,9 @@ class Map {
     }
   }
   void displayBOSS () {
-    background(0);
-    stroke(0);
-    strokeWeight(12);
-    fill(255);
+    background(11,75,179);
+    stroke(255);
+    fill(0);
     rect(xBOSS, yBOSS, wBOSS, hBOSS);
   }
 
