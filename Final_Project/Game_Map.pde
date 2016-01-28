@@ -1,4 +1,5 @@
 class Map {
+  float red = 255;
   float x=0;//all of the xs and ys and hs and ws are the coordinates for the various platforms
   float y=height/2-200;
   float w=600;
@@ -29,8 +30,8 @@ class Map {
   float yBOSS=500;
   float wBOSS= 1000;
   float hBOSS= 100;
-
-  //float x7 = 4, y7 = height/2, w7 = 990, h7 = 80;
+  
+  float x7 = 0, y7 = height/2, w7 = 1000, h7 = 100;
   void display() {//display second map
     background(150);
     stroke(0);
@@ -39,7 +40,7 @@ class Map {
     rect(x, y, w, h);
     rect(x2, y2, w2, h2);
     rect(x3, y3, w3, h3);
-    if (enemy.health <1 && enemy.health2 < 1 && enemy.health3 < 1 ) {
+    if (enemy.health4 <1 && enemy.health5 < 1 && enemy.health6 < 1 ) {
       fill(0);
       textSize(32);
       text("Proceed to Next Dream", 565, 550);
@@ -53,10 +54,10 @@ class Map {
     rect(x4, y4, w4, h4);
     rect(x5, y5, w5, h5);
     rect(x6, y6, w6, h6);
-    if (enemy.health4 <1 && enemy.health5 < 1 && enemy.health6 < 1 ) {
+    if (enemy.health <2 && enemy.health2 < 2 && enemy.health3 < 2 ) {
       fill(0);
       textSize(32);
-      //text("Proceed to Next Dream", 565, 550);
+      text("Proceed to Boss", 565, 550);
     }
   }
   void displayBOSS () {//boss map
@@ -66,12 +67,16 @@ class Map {
     rect(xBOSS, yBOSS, wBOSS, hBOSS);
   }
 
-  /*void survival() {//survival map
-   background(100);
+  void survival() {//survival map
+   background(red,0,0);
+   red-=0.5;
    fill(255);
    stroke(0);
-   //strokeWeight(8);
-   rect(x4, y4, w4, h4);
+   strokeWeight(12);
+   rect(x7, y7, w7, h7);
+   if (red == 0){
+     stage = 4.5;
    }
-   */
+   }
+   
 }

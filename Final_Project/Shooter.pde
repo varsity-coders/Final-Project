@@ -138,4 +138,14 @@ void updateBOSSright(){
       }
     } 
 }
+void updatesurvivalleft(){
+    if (shootleft == true) {
+    x2-=speed2;
+  }
+}
+void updatesurvivalright(){
+    if (shoot == true) {
+    x2+=speed2;
+  }
+}
 }

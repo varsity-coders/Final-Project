@@ -9,7 +9,7 @@ class Levels {
     rect(20, height-45, xp, 35);
     fill(255);
     textSize(16);
-    text("XP:"+xp, 20, height-50);
+    text("XP:"+xp, 40, height-50);
     fill(255);
     textSize(22);
     text("Level:" + l, 700, height-25);

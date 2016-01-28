@@ -16,7 +16,7 @@ Minim minim;//initializes minim
 AudioPlayer full;//initializes various sounds used throughout the game
 AudioPlayer dream;//for the campaign mode song
 AudioPlayer night;//survival mode song
-AudioPlayer rollover;//
+AudioPlayer rollover;//menu sounds
 AudioPlayer rollover1;
 AudioPlayer rollover2;
 AudioPlayer loadscreen;
@@ -35,7 +35,7 @@ float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, c, z, d, rw4,
   rx6, ry9, rh4, rw9, rx10, rw10, ry10, rh10, rx11, rw11, ry11, rh11;//mostly hitboxes for menu
 PImage zig, dreams, back, load, campaignbackground;//various pictures used later
 PFont cool;//creates PFont "cool"
-float loadx, loadw, loadfill, stage, newstage, nextlevel;//creates floats to be able to change levels and stages consecutively without key presses
+float loadx, loadw, loadfill, stage, nextlevel;//creates floats to be able to change levels and stages consecutively without key presses
 float customtime = 1;//used later on for loading screen of campaign
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
@@ -51,11 +51,10 @@ void setup() {
   y = height/2;
   loadx = 0;
   loadw = 10;
-  nextlevel = 1;
+  nextlevel = 2;
   vy = 5;
   vy = 5;
   stage=1;
-  newstage = 0;
   rh=50;//all of the following were used in creating the hitboxes used to click on menus and change settings (coordinates of each box)
   rw1=990;
   rw2=990;
@@ -168,7 +167,7 @@ void draw() {
     noFill();
     rect(rx, ry2, rw2, rh);//box for survival button
     fill(r);
-    text("SURVIVAL", width/2, 625);//survival text
+    text("SURVIVAL", width/2, 625);//extra text
     noFill();
     rect(rx, ry3, rw3, rh);//box for settings button
     fill(d);
@@ -230,13 +229,14 @@ void draw() {
         //fix the player after this happens
         // add second level
         stage = 3;//stage 3 = actual campaign
+        dream.play(); //play first part of song
       }
     }
   }
   if (stage==3) {
     campaign();
   }
-  if (stage == 3.5) {//survival mode briefing incoming
+  if (stage == 3.5) {//survival mode
     full.pause();
     background(0);//black background
     fill(0);
@@ -260,14 +260,27 @@ void draw() {
       fill(255);
       text("NOW SURVIVE", width/2, 750);
       if (mousePressed) {
-        stage = 4;//if mouse is pressed, real survival mode starts
+        stage = 4;//if mouse is pressed, survival mode starts
       }
     }
   }
   if (stage==4) {
-    //fix survival
-    //test survival A LOT
     survival();
+  }
+  if (stage==4.5) {
+    background(0);
+    textSize(32);
+    textAlign(CENTER);
+    text("THE NIGTMARES HAVE CONSUMED YOU", width/2, height/2);
+    text("PRESS SPACE TO GO BACK TO MENU", width/2, height/2+100);
+    if (mousePressed) {
+      if (key == ' ') {
+        stage = 2;
+        night.pause();
+        full.rewind();
+        full.play();
+      }
+    }
   }
   if (stage==5) {//stage 5 is the settings page/instructions page
     background(0);//black background
@@ -326,32 +339,6 @@ void draw() {
       laserblast.mute();
     }
   }
-  if ( newstage ==6 ) {//when you die in campaign mode...
-    dream.mute();//mute the dreams song
-    background(0);//set a black background
-    textSize(72);//text size
-    textAlign(CENTER);//centered
-    text("Game Over", width/2, height/2);//game over at the center
-    textSize(48);//size for next text
-     text("Click to Go Back to Menu", width/2, height/2+100);//text 
-    if (mousePressed) { //problem here after click
-      stage = 2;//if mouse pressed the game should be brought back to stage 2, which it does do but the text doesn't dissapear
-      dream.pause();//pause dream music
-    }
-  }
-  if (newstage == 7) {//stage 7 which is survival
-    night.mute();//mute nightmare music
-    background(0);//black background
-    textSize(72);
-    textAlign(CENTER);
-    text("You Failed", width/2, height/2);//when you die in survival
-    textSize(48);
-    text("Click to Go Back to Menu", width/2, height/2+100);//click to go back BUT
-    if (mousePressed) { ////problem here after click
-      night.pause();//pause nightmare music
-      stage = 2;//if mouse pressed the game should be brought back to stage 2, which it does do but the text doesn't dissapear
-    }
-  }
 }
 
 void keyPressed() {
@@ -362,7 +349,7 @@ void keyPressed() {
     l = -1;//if left key pressed, l variable increases 1 and sprite moves to the left (hence negative increments)
   }
   if (keyCode == UP) {
-    up = -1;//if up key pressed, up variable increases 1 and sprite moves up  
+    up = -1;//if up key pressed, up variable increases 1 and sprite moves up
   }
   if (key == 'z') {
     player.sp += speedStat;//if z key pressed, speedstat of 1 is added to players normal movement speed
@@ -389,12 +376,6 @@ void keyReleased() {
   }
 } 
 void campaign() {
-  dream.play();//play dreams song when campaign starts
-  //campaignbackground = loadImage("campaign.png");
-  //image(campaignbackground, 1000,800);
-  println(enemy.health4);
-    println(enemy.health5);
-      println(enemy.bosshealth);
   if (nextlevel==1) {//map level 1 and its properties
     map.display2();
     enemy.displaylvl2();
@@ -404,10 +385,6 @@ void campaign() {
     enemy.enemydissapearlvl2();
     enemy.isInContactEnemyfromRight4();
     enemy.isInContactEnemyfromLeft4();
-    enemy.isInContactEnemyfromRight5();
-    enemy.isInContactEnemyfromLeft5();
-    enemy.isInContactEnemyfromRight6();
-    enemy.isInContactEnemyfromLeft6();
     enemy.isEnemyinContactWith4();
     enemy.isEnemyinContactWith5();
     enemy.isEnemyinContactWith6();
@@ -417,20 +394,20 @@ void campaign() {
         if (up !=0) {
           player.vel.y= -player.ysp;
         }
-      } else if (player.per.y>=map.y-map.h4 && player.per.x > map.x4) {//if not on 1st platform falls to floor 
+      } else if (player.per.y>=map.y4-map.h4 && player.per.x > map.x4) {//if not on 1st platform falls to floor 
         player.vel.y += grav-0.1;
       }
     }
     if (enemy.health5 > -2) {
       if (player.per.y >= map.y5-map.h5 && player.per.x < map.w5) {//if on 2nd platform player can jump and wont fall thru
         player.vel.y = 0;
-              if (up !=0) {
-        player.vel.y = -player.ysp;
-      }
+        if (up !=0) {
+          player.vel.y = -player.ysp;
+        }
       }
     }
-    if (player.per.y >= map.y6-map.h6){//if player is on 3rd platform he can jump and and wont fall thru
-            player.vel.y = 0;
+    if (player.per.y >= map.y6-map.h6) {//if player is on 3rd platform he can jump and and wont fall thru
+      player.vel.y = 0;
       if (up !=0) {
         player.vel.y = -player.ysp;
       }
@@ -469,7 +446,7 @@ void campaign() {
         if (up !=0) {
           player.vel.y= -player.ysp;
         }
-      } else if (player.per.y>map.h && player.per.x< 600) {//if not player brought down by gravity
+      } else if (player.per.y>map.h && player.per.x< map.w) {//if not player brought down by gravity
         player.vel.y += grav;
       }
     }
@@ -503,15 +480,15 @@ void campaign() {
   }
   if (nextlevel==3) {//level 3:boss level
     map.displayBOSS();//all of the boss level's properties
-        enemy.bossdisplay();
+    enemy.bossdisplay();
     enemy.updateboss();
     enemy.isBOSSinContactWith();
     enemy.isInContactBOSSfromRight();
     enemy.isInContactBOSSfromLeft();
     shoot.updateBOSSright();
     shoot.updateBOSSleft();
-    if (player.per.y >= map.yBOSS-54){//if player is on platform he can jump and wont fall thru
-           player.vel.y = 0;
+    if (player.per.y >= map.yBOSS-54) {//if player is on platform he can jump and wont fall thru
+      player.vel.y = 0;
       if (up !=0) {
         player.vel.y = -player.ysp;
       }
@@ -524,7 +501,7 @@ void campaign() {
   // Draw this image instead of player.image
   image(frameImage, 0, 0);
   popMatrix();
-  // This function  returns a new smaller crop from the spritesheet.
+  // This function returns a new smaller crop from the spritesheet.
   level.display();//displays amount of xp
   player.health();//shows players health health bar
   level.levelup();//shows level up if it happens
@@ -549,11 +526,11 @@ void campaign() {
       }
     }
   }
-  if (player.lives == 0) {//if player runs out of lives stage goes to 6 (death screen)
-    newstage = 6;
-  }
-  if (player.per.y < -2) {
-    player.vel.y = -player.vel.y;
+  if (player.lives == 0) {//if player runs out of lives stage goes to menu
+    textAlign(CENTER);
+    textSize(32);
+    text("YOU FAILED TO CONQUER YOUR DREAMS", width/2, height/2);
+    stage = 2;
   }
 
   if (player.per.x-35<= -1) {
@@ -603,7 +580,7 @@ void campaign() {
     speedStat = 3;
     shoot.speed = 6;
     shoot.speed2 = 6;
-        shoot.powerstat = 3;
+    shoot.powerstat = 3;
     if (player.sp > 5 || player.sp<0) {
       player.sp = 2;
     }
@@ -612,7 +589,7 @@ void campaign() {
     speedStat = 4;
     shoot.speed = 7;
     shoot.speed2 = 7;
-        shoot.powerstat = 4;
+    shoot.powerstat = 4;
     if (player.sp > 6 || player.sp<0) {
       player.sp = 2;
     }
@@ -621,7 +598,7 @@ void campaign() {
     speedStat = 5;
     shoot.speed = 8;
     shoot.speed2 = 8;
-        shoot.powerstat = 5;
+    shoot.powerstat = 5;
     if (player.sp > 7 || player.sp<-1) {
       player.sp = 2;
     }
@@ -654,107 +631,26 @@ void campaign() {
       stage = 2;//menu
     }
   }
-      enemy.bossdissapear();//rip boss :((
+  enemy.bossdissapear();//rip boss :((
 }
 
 void survival() {  
   night.play();//play night song
-  //map.survival();
-
+  map.survival(); //survival map
+  // This function returns a new smaller crop from the spritesheet.
+  player.survivalhealth();//shows survival health
+  shoot.displayright();//shows when a shot is shot to the right
+  shoot.displayleft();//shows when a shot is shot to the left
+  shoot.updatesurvivalleft();//updates when a shot is shot to the left
+  shoot.updatesurvivalright();//updates when a shot is shot to the right
   pushMatrix();
-  translate(player.per.x, player.per.y);//sprite settings and config
   imageMode(CENTER);
   PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
   // Draw this image instead of player.image
-  image(frameImagered, 0, 0);
+  image(frameImagered, width/2, height/2-45);
   popMatrix();
-  // Our function to return a new smaller crop from the spritesheet.
-  //enemy.displaysurvival();
-  //enemy.isInContactEnemy();
-  player.survivalhealth();//shows survival health
-  enemy.enemydissapearlvl1();
-  if (player.lives == 0) {
-    newstage = 7;//stage 7 is survival end screen
-  }
-  if (player.per.y >= map.y-map.h && player.per.x < map.w) {// when on the platform you can jump and not fall through
-    player.vel.y = 0;
-  }
-  if (player.per.y > map.y-map.h) {//when in the air you fall back down
-    player.vel.y += grav;
-  } else {
-    player.vel.y = 0;
-  }
-  if (player.per.y >= floor && up != 0) {
-    player.vel.y = -player.ysp;
-  }
-  if (player.per.x-30>= width) {
-    player.per.x = 0;
-  }
-  if (player.per.x-30<= 0) {
-    player.per.x = 35;
-  }
-  player.vel.x = player.sp * (l + r);//the x coordinate of sprite is the speed multiplied by the left and right variables added
-  player.per.add(player.vel);//velocity added to player
-  if (player.per.y < floor) {//player doesnt fall thru floor
-    player.vel.y += grav;
-  } else {
-    player.vel.y = 0;
-  }
-  if (player.per.y >= floor && up != 0) {//gravity
-    player.vel.y = -player.ysp;
-  }
-  player.frameTime += .25; //framerate
-  if (player.frameTime >= 8) { 
-    player.frameTime = 1;
-  }
-  player.frameColumn = (int)player.frameTime;
-
-  if (player.vel.x == 0 && player.vel.y == 0) {//when player isnt moving the frame column is 0
-    player.frameColumn = 0;
-  }
-
-  if (l != 0) {
-    player.frameRow = 0;
-  }
-  if (r != 0) {
-    player.frameRow = 1;
-  } 
-  if (level.l == 1) {
-    if (player.sp > 4 || player.sp<1) {
-      player.sp = 2;
-    }
-  }
-  if (level.l == 2) {
-    speedStat = 4;
-    if (player.sp > 8 || player.sp<1) {
-      player.sp = 2;  //add other levels to game
-    }
-  }
-  if (key == 'p' || key == 'P') {//same as pause screen in the campaign
-    background(100, 100);
-    back = loadImage("BackButton.png");
-    image(back, 75, 75, 50, 50);
-    textSize(72);
-    textAlign(CENTER);
-    fill(255);
-    text("Paused", width/2, height/2);
-    textAlign(CENTER);
-    textSize(48);
-    text(" Press Space to Resume", width/2, 600);
-    noFill();
-    rect(rx11, ry11, rw11, rh11);
-    if (keyPressed) {
-      if (key == ' ') {
-        stage = 4;
-      }
-    }
-    if (mousePressed) {//back button pressing
-      if (mouseX > rx11 && mouseX<rx11+rw11 && mouseY > ry11 && mouseX< ry11+rh11) {
-        night.rewind();
-        night.pause();
-        full.play();
-        stage = 2;//back to menu
-      }
-    }
+  player.health2-=2;
+  if (player.health2 < 0) {
+    player.health2 = 0;
   }
 }

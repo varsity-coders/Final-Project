@@ -19,7 +19,7 @@ class Sprite {
     image = loadImage("sprites.png");//loads images of sprites
     imagered = loadImage("spritesred.png");
     life = loadImage("lives.png");
-    per = new PVector(920, 0);//location of sprite
+    per = new PVector(905, 0);//location of sprite
     vel = new PVector(2, 10);//vel of sprite 
     frameRow = 0; 
     frameColumn = 0; 

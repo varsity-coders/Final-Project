@@ -37,12 +37,12 @@ class Enemy {
     y4 = height/2-255;
     y5 = height/2-55;
     y6 = height/2+145;
-    health = 15;//health of enemies
-    health2 = 25;
-    health3 = 35;
-    health4 = 25;
-    health5 = 35;
-    health6 = 45;
+    health = 10;//health of enemies
+    health2 = 20;
+    health3 = 30;
+    health4 = 20;
+    health5 = 30;
+    health6 = 30;
     image  = loadImage("enemy.png");
     draw=true;
     draw2=true;
@@ -272,58 +272,6 @@ class Enemy {
       return false;
     }
   }
-  void enemydissapearlvl1() {
-    if (health == 0) {
-      level.xp+=60;
-      picvel = 0;
-    }
-    if (health2 == 0) {
-      level.xp+=80;
-      picvel2 = 9;
-    }
-    if (health3 == 0) {
-      level.xp+=100;
-      player.lives+=1;
-      picvel3 = 0;
-    }
-  }
-  void enemydissapearlvl2() {
-    if (health4 == 0) {
-      level.xp+=80;
-      picvel4 = 0;
-    }
-    if (health5 == 0) {
-      level.xp+=100;
-      picvel5 = 0;
-    }
-    if (health6 == 0) {
-      level.xp+=120;
-      picvel6 = 0;
-    }
-  }
-  void bossdissapear() {
-    if (bosshealth == 0) {
-      background(0);
-      fill(255);
-      textAlign(CENTER);
-      textSize(32);
-      text("YOU BEAT CAMPAIGN Mode!", width/2, height/2);
-      text("Now go test yourself in Survival Mode", width/2, height/2+100);
-      if (keyPressed){
-        if (key == ' '){
-          stage = 2;
-        }
-      }
-    }
-  }
-  void displaysurvival() {
-    imagered = loadImage("enemyred.png");
-    //enemydefeat
-  }
-
-
-
-
   boolean isInContactEnemyfromRight4() { 
     if ( dist(x4, y4, shoot.x, shoot.y) < 10) { 
       health4 -=shoot.powerstat;
@@ -418,6 +366,50 @@ class Enemy {
       return true;
     } else {      
       return false;
+    }
+  }
+  void enemydissapearlvl1() {
+    if (health == 0) {
+      level.xp+=60;
+      picvel = 0;
+    }
+    if (health2 == 0) {
+      level.xp+=80;
+      picvel2 = 9;
+    }
+    if (health3 == 0) {
+      level.xp+=100;
+      player.lives+=1;
+      picvel3 = 0;
+    }
+  }
+  void enemydissapearlvl2() {
+    if (health4 == 0) {
+      level.xp+=80;
+      picvel4 = 0;
+    }
+    if (health5 == 0) {
+      level.xp+=100;
+      picvel5 = 0;
+    }
+    if (health6 == 0) {
+      level.xp+=120;
+      picvel6 = 0;
+    }
+  }
+  void bossdissapear() {
+    if (bosshealth == 0) {
+      background(0);
+      fill(255);
+      textAlign(CENTER);
+      textSize(32);
+      text("YOU BEAT CAMPAIGN Mode!", width/2, height/2);
+      text("Now go enjoy yourself in Survival Mode", width/2, height/2+100);
+      if (keyPressed) {
+        if (key == ' ') {
+          stage = 2;
+        }
+      }
     }
   }
 }
