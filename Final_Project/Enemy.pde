@@ -58,7 +58,6 @@ class Enemy {
   }
 
   void displaylvl1() {
-    println(enemy.health3); //fix enemy health 3
     if  (draw==true) {
       image(image, x, y);
     }
