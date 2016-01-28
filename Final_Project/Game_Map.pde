@@ -1,5 +1,5 @@
 class Map {
-  float x=0;
+  float x=0;//all of the xs and ys and hs and ws are the coordinates for the various platforms
   float y=height/2-200;
   float w=600;
   float h=50;
@@ -25,13 +25,13 @@ class Map {
   float w6=1000;
   float h6=40;
 
-  float xBOSS=0;
+  float xBOSS=0;//x of boss platform
   float yBOSS=500;
   float wBOSS= 1000;
   float hBOSS= 100;
 
   //float x7 = 4, y7 = height/2, w7 = 990, h7 = 80;
-  void display() {
+  void display() {//display second map
     background(150);
     stroke(0);
     strokeWeight(12);
@@ -45,7 +45,7 @@ class Map {
       text("Proceed to Next Dream", 565, 550);
     }
   }
-  void display2() {
+  void display2() {//display first map
     background(160, 206, 222);
     fill(255);
     stroke(0);
@@ -59,14 +59,14 @@ class Map {
       //text("Proceed to Next Dream", 565, 550);
     }
   }
-  void displayBOSS () {
+  void displayBOSS () {//boss map
     background(11,75,179);
     stroke(255);
     fill(0);
     rect(xBOSS, yBOSS, wBOSS, hBOSS);
   }
 
-  /*void survival() {
+  /*void survival() {//survival map
    background(100);
    fill(255);
    stroke(0);

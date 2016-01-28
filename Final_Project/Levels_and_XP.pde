@@ -1,9 +1,9 @@
 class Levels {
-  int l = 1;
-  int xp = 0;
+  int l = 1;//start out at level 1
+  int xp = 0;//0 xp at the start
   float o = 255;
   float op1 = 255,op2 = 255,op3 = 255,op4 = 255;
-  void display() {
+  void display() {//allows the xp meter to increase as one kills enemies
     noStroke();
     fill(0, 112, 186);
     rect(20, height-45, xp, 35);
@@ -21,7 +21,7 @@ class Levels {
         l = 5;
       }
     }
-    void levelup(){
+    void levelup(){//level up animations
         if (l==2) {
     fill(255, 255, 255, op1);
     textSize(16);

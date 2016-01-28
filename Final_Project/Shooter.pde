@@ -1,15 +1,15 @@
 class Shooter {
-  float x, y, d, x2, y2, d2;
-  float speed, speed2,powerstat;
-  boolean shoot, shootleft;
-  PImage blastblue, blast;
-  PImage blastblueleft, blastleft;
+  float x, y, d, x2, y2, d2;//coordinates of bullets
+  float speed, speed2,powerstat;//stats of bullets
+  boolean shoot, shootleft;//commands for shooting
+  PImage blastblue, blast;//image of blast
+  PImage blastblueleft, blastleft;//image
   Shooter() {
     shoot = false;
     speed = 4;
     speed2 = 4;
     powerstat = 1;
-    blast = loadImage("blast.png");
+    blast = loadImage("blast.png");//just loads up the images but they dont appear just yet
     blastleft = loadImage("blast2.png");
     blastblue = loadImage("blastblue.png");
     blastblueleft = loadImage("blastblue2.png");

@@ -1,25 +1,25 @@
 class Enemy {
   PImage image, imagered, boss;
-  float x, y; 
-  float picvel;
-  float x2, y2;
+  float x, y; //x and y coordinates of enemy
+  float picvel;//picture of it in motion
+  float x2, y2;//second enemy coordinates
   float picvel2;
-  float x3, y3; 
+  float x3, y3; //3rd enemy coordinates
   float picvel3;
-  float health, health2, health3;
-  float x4, y4; 
+  float health, health2, health3;//health of all 3 enemies
+  float x4, y4; //4th, 5th and 6th enemies and their picvels and their healths
   float picvel4;
   float x5, y5;
   float picvel5;
   float x6, y6; 
   float picvel6;
   float health4, health5, health6;
-  float xboss, yboss, bossvel, bosshealth;
+  float xboss, yboss, bossvel, bosshealth;//variables for the boss enemy
   boolean draw, draw2, draw3;
   boolean draw4, draw5, draw6;
   boolean drawboss;
   Enemy() {
-    x = random(400, 560);
+    x = random(400, 560);//gives x movement to enemies (back and forth)
     x2 = random(440, 960);
     x3 = random(400, 560);
     x4 = random(440, 960);
@@ -31,13 +31,13 @@ class Enemy {
     picvel4 = -random(1, 2);
     picvel5 = random(1.25, 2);
     picvel6 = random(1.5, 2.5);
-    y = height/2-255;
+    y = height/2-255;//heights of various enemies (makes them seem to walk on platforms)
     y2 =height/2-55;
     y3 = height/2+145;
     y4 = height/2-255;
     y5 = height/2-55;
     y6 = height/2+145;
-    health = 15;
+    health = 15;//health of enemies
     health2 = 25;
     health3 = 35;
     health4 = 25;
@@ -50,10 +50,10 @@ class Enemy {
     draw4=true;
     draw5=true;
     draw6=true;
-    xboss = 800;
+    xboss = 800;//where boss starts out
     yboss = 353;
-    bossvel = 4;
-    bosshealth = 100;
+    bossvel = 4;//velocity of boss
+    bosshealth = 100;//health of boss
     drawboss = true;
   }
 
