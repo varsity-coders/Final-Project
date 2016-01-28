@@ -54,7 +54,7 @@ void setup() {
   nextlevel = 1;
   vy = 5;
   vy = 5;
-  stage=1;
+  stage=2;
   rh=50;//all of the following were used in creating the hitboxes used to click on menus and change settings (coordinates of each box)
   rw1=990;
   rw2=990;
@@ -142,16 +142,17 @@ void draw() {
       text("Entering Dreams...", width/2, 700);//at 6.45s it says "entering dreams"
     }
     if (loadw > 1100) {//once loading with reaches 1100...
-      full.play();//game starts
+      full.play();//song starts
       full.loop();
       stage = 2;//onto stage 2...
     }
   }
 
   if (stage==2) {
+    imageMode(CENTER);
     background(0);//black background
     zig = loadImage("ZIG.png");//loads zigzag image in the background
-    image(zig, 0, 150, 1000, 300);//coordinates
+    image(zig, 500, 300, 1000, 300);//coordinates
     fill(255);//fill of following text
     textSize(60);//size
     textAlign(CENTER);//centered
@@ -266,30 +267,25 @@ void draw() {
   }
   if (stage==4) {
     survival();
+    textSize(20);
+    text("YOU CAN'T MOVE! THE NIGHTMARES ARE CONSUMING YOU! ", 500,250);
   }
   if (stage==4.5) {
     background(0);
     textSize(32);
     textAlign(CENTER);
-    text("THE NIGTMARES HAVE CONSUMED YOU", width/2, height/2);
-    text("PRESS SPACE TO GO BACK TO MENU", width/2, height/2+100);
-    if (mousePressed) {
-      if (key == ' ') {
-        stage = 2;
-        night.pause();
-        full.rewind();
-        full.play();
-      }
+    text("THE NIGHTMARES HAVE CONSUMED YOU", width/2, height/2);
+    textSize(27);
+    text("YOU HAVE WOKEN UP FROM YOUR DREAMS! OR HAVE YOU...", width/2, height/2+100);
     }
-  }
   if (stage==5) {//stage 5 is the settings page/instructions page
     background(0);//black background
     back = loadImage("BackButton.png");//back button in the left corner
     dreams = loadImage("DreamsNight.png");//funny picture near the middle
     noFill();
     rect(rx4, ry7, rw7, rh2);//hitboxes for settings buttons
-    image(dreams, 365, 155, 280, 280);//coordinates for funny picture
-    image(back, 50, 50, 53, 53);//back button coordinates
+    image(dreams, 500, 275, 280, 280);//coordinates for funny picture
+    image(back, 75, 75, 53, 53);//back button coordinates
     rect(rx5, ry8, rw8, rh3);//sound off button hit box
     rect(rx6, ry9, rw9, rh4);//sound on button hit box
     textAlign(CENTER);
