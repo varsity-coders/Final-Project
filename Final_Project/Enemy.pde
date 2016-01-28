@@ -9,56 +9,41 @@ class Enemy {
   float health, health2, health3;//health of all 3 enemies
   float x4, y4; //4th, 5th and 6th enemies and their picvels and their healths
   float picvel4;
-  float x5, y5;
-  float picvel5;
-  float x6, y6; 
-  float picvel6;
-  float health4, health5, health6;
-  float xboss, yboss, bossvel, bosshealth;//variables for the boss enemy
+  float health4;
+  float xboss, yboss, bossvel, bosshealth; //variables for the boss enemy
   boolean draw, draw2, draw3;
-  boolean draw4, draw5, draw6;
+  boolean draw4;
   boolean drawboss;
   Enemy() {
     x = random(400, 560);//gives x movement to enemies (back and forth)
     x2 = random(440, 960);
     x3 = random(400, 560);
     x4 = random(440, 960);
-    x5 =  random(40, 660);
-    x6 =  random(40, 960);
     picvel = -random(1, 2);
     picvel2 = random(1, 2);
     picvel3 = random(1, 2.5);
     picvel4 = -random(1, 2);
-    picvel5 = random(1.25, 2);
-    picvel6 = random(1.5, 2.5);
     y = height/2-255;//heights of various enemies (makes them seem to walk on platforms)
     y2 =height/2-55;
     y3 = height/2+145;
     y4 = height/2-255;
-    y5 = height/2-55;
-    y6 = height/2+145;
     health = 10;//health of enemies
-    health2 = 20;
-    health3 = 30;
-    health4 = 20;
-    health5 = 30;
-    health6 = 30;
+    health2 = 10;
+    health3 = 10;
+    health4 = 10;
     image  = loadImage("enemy.png");
     draw=true;
     draw2=true;
     draw3=true;
     draw4=true;
-    draw5=true;
-    draw6=true;
     xboss = 800;//where boss starts out
     yboss = 353;
     bossvel = 4;//velocity of boss
-    bosshealth = 100;//health of boss
+    bosshealth = 20;//health of boss
     drawboss = true;
   }
 
   void displaylvl1() {
-    println(enemy.health3); //fix enemy health 3
     if  (draw==true) {
       image(image, x, y);
     }
@@ -87,24 +72,9 @@ class Enemy {
     if  (draw4==true) {
       image(image, x4, y4);
     }
-    if  (draw5==true) {
-      image(image, x5, y5);
-    }
-    if  (draw6==true) {
-      image(image, x6, y6);
-    }
     x4 += picvel4;
-    x5 += picvel5;
-    x6 += picvel6;
     if (x4+40>= width || x4-40<=400) {
       picvel4*=-1;
-    }
-    if (x5+40>= 700 || x5-40<=0) {
-      picvel5*=-1;
-    }
-
-    if (x6+40>= width || x6-40<=0) {
-      picvel6*=-1;
     }
   }
   void updatelvl1() {
@@ -121,12 +91,6 @@ class Enemy {
   void updatelvl2() {
     if (health4 <=0 ) {
       draw4 = false;
-    }
-    if (health5 <=0 ) {
-      draw5 = false;
-    }
-    if (health6 <=0 ) {
-      draw6 = false;
     }
   }
   void updateboss() {
@@ -252,10 +216,8 @@ class Enemy {
   }
   boolean isInContactBOSSfromRight() { 
     if ( dist(xboss, yboss+50, shoot.x, shoot.y) < 40) { 
-      bosshealth -= shoot.powerstat;
-      if (bosshealth < 1 ) {
         drawboss = false;
-      }
+      
       return true;
     } else {      
       return false;
@@ -263,10 +225,8 @@ class Enemy {
   }
   boolean isInContactBOSSfromLeft() { 
     if ( dist(xboss, yboss+50, shoot.x2, shoot.y2) < 40) { 
-      bosshealth -=shoot.powerstat;
-      if (bosshealth < 1 ) {
         drawboss = false;
-      }
+      
       return true;
     } else {      
       return false;
@@ -274,32 +234,7 @@ class Enemy {
   }
   boolean isInContactEnemyfromRight4() { 
     if ( dist(x4, y4, shoot.x, shoot.y) < 10) { 
-      health4 -=shoot.powerstat;
-      if (health4 < 1 ) {
-        draw4 = false;
-      }
-      return true;
-    } else {      
-      return false;
-    }
-  }
-  boolean isInContactEnemyfromRight5() { 
-    if ( dist(x5, y5, shoot.x, shoot.y) < 10) { 
-      health5 -=shoot.powerstat;
-      if (health5 < 1 ) {
-        draw5 = false;
-      }
-      return true;
-    } else {      
-      return false;
-    }
-  }
-  boolean isInContactEnemyfromRight6() { 
-    if ( dist(x6, y6, shoot.x, shoot.y) < 10) { 
-      health6 -=shoot.powerstat;
-      if (health6 < 1 ) {
-        draw6 = false;
-      }
+      draw4 = false;
       return true;
     } else {      
       return false;
@@ -307,32 +242,7 @@ class Enemy {
   }
   boolean isInContactEnemyfromLeft4() { 
     if ( dist(x4, y4, shoot.x2, shoot.y2) < 10) { 
-      health4 -=shoot.powerstat;
-      if (health4 < 1 ) {
-        draw4 = false;
-      }
-      return true;
-    } else {      
-      return false;
-    }
-  }
-  boolean isInContactEnemyfromLeft5() { 
-    if ( dist(x5, y5, shoot.x2, shoot.y2) < 10) { 
-      health5 -=shoot.powerstat;
-      if (health5 < 1 ) {
-        draw5 = false;
-      }
-      return true;
-    } else {      
-      return false;
-    }
-  }
-  boolean isInContactEnemyfromLeft6() { 
-    if ( dist(shoot.x, shoot.y2, x6, y6) < 10) { 
-      health6 -=shoot.powerstat;
-      if (health6 < 1 ) {
-        draw6 = false;
-      }
+      draw4 = false;
       return true;
     } else {      
       return false;
@@ -341,26 +251,6 @@ class Enemy {
   boolean isEnemyinContactWith4() {
     if (health4 >= 0) {
       if ( dist(player.per.x, player.per.y, x4, y4) < 70) { 
-        player.health -=2;
-      }
-      return true;
-    } else {      
-      return false;
-    }
-  }
-  boolean isEnemyinContactWith5() {
-    if (health5 >= 0) {
-      if ( dist(player.per.x, player.per.y, x5, y5) < 70) { 
-        player.health -=2;
-      }
-      return true;
-    } else {      
-      return false;
-    }
-  }
-  boolean isEnemyinContactWith6() {
-    if (health6 >= 0) {
-      if ( dist(player.per.x, player.per.y, x6, y6) < 70) { 
         player.health -=2;
       }
       return true;
@@ -387,14 +277,6 @@ class Enemy {
     if (health4 == 0) {
       level.xp+=80;
       picvel4 = 0;
-    }
-    if (health5 == 0) {
-      level.xp+=100;
-      picvel5 = 0;
-    }
-    if (health6 == 0) {
-      level.xp+=120;
-      picvel6 = 0;
     }
   }
   void bossdissapear() {

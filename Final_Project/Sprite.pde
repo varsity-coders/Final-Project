@@ -10,7 +10,7 @@ class Sprite {
   float sp;//speed of sprite
   float ysp;//y speed
   int health =400;//health of sprite
-    int health2 =800;//health of sprite 
+  int health2 =800;//health of sprite 
   int lives = 3;//3 lives                //change to 3 and add life ups
   float a =800, d=800;
   int extralives;
@@ -84,7 +84,6 @@ class Sprite {
         health = 0;
         lives = 0;
       }
-    
     }
   }
   void survivalhealth() {//only 1 live

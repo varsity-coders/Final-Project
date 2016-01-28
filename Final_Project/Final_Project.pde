@@ -54,7 +54,7 @@ void setup() {
   nextlevel = 1;
   vy = 5;
   vy = 5;
-  stage=2;
+  stage=1;
   rh=50;//all of the following were used in creating the hitboxes used to click on menus and change settings (coordinates of each box)
   rw1=990;
   rw2=990;
@@ -142,7 +142,7 @@ void draw() {
       text("Entering Dreams...", width/2, 700);//at 6.45s it says "entering dreams"
     }
     if (loadw > 1100) {//once loading with reaches 1100...
-      full.play();//song starts
+      full.play();//game starts
       full.loop();
       stage = 2;//onto stage 2...
     }
@@ -152,7 +152,7 @@ void draw() {
     imageMode(CENTER);
     background(0);//black background
     zig = loadImage("ZIG.png");//loads zigzag image in the background
-    image(zig, 500, 300, 1000, 300);//coordinates
+    image(zig, 500,300, 1000, 300);//coordinates
     fill(255);//fill of following text
     textSize(60);//size
     textAlign(CENTER);//centered
@@ -268,16 +268,17 @@ void draw() {
   if (stage==4) {
     survival();
     textSize(20);
-    text("YOU CAN'T MOVE! THE NIGHTMARES ARE CONSUMING YOU! ", 500,250);
+    text("YOU CAN'T MOVE! THE NIGHTMARES ARE CONSUMING YOU", 500,250);
   }
   if (stage==4.5) {
     background(0);
     textSize(32);
     textAlign(CENTER);
-    text("THE NIGHTMARES HAVE CONSUMED YOU", width/2, height/2);
+    text("THE NIGTMARES HAVE CONSUMED YOU", width/2, height/2);
     textSize(27);
     text("YOU HAVE WOKEN UP FROM YOUR DREAMS! OR HAVE YOU...", width/2, height/2+100);
-    }
+
+  }
   if (stage==5) {//stage 5 is the settings page/instructions page
     background(0);//black background
     back = loadImage("BackButton.png");//back button in the left corner
@@ -373,6 +374,9 @@ void keyReleased() {
 } 
 void campaign() {
   if (nextlevel==1) {//map level 1 and its properties
+  println(enemy.health);
+    println(enemy.health2);
+      println(enemy.health3);
     map.display2();
     enemy.displaylvl2();
     enemy.updatelvl2();
@@ -382,8 +386,6 @@ void campaign() {
     enemy.isInContactEnemyfromRight4();
     enemy.isInContactEnemyfromLeft4();
     enemy.isEnemyinContactWith4();
-    enemy.isEnemyinContactWith5();
-    enemy.isEnemyinContactWith6();
     if (enemy.health4 > -2) {
       if (player.per.y >= map.y4-map.h4-10 &&  player.per.x > map.x4) {//when the player is on the 1st platform he can jump on the other platforms and wont fall thru, so long as the other enemies are still alive
         player.vel.y = 0;
@@ -394,22 +396,21 @@ void campaign() {
         player.vel.y += grav-0.1;
       }
     }
-    if (enemy.health5 > -2) {
-      if (player.per.y >= map.y5-map.h5 && player.per.x < map.w5) {//if on 2nd platform player can jump and wont fall thru
+      if (player.per.y >= map.y5-map.h5 && player.per.x <map.x5+ map.w5) {//if on 2nd platform player can jump and wont fall thru
         player.vel.y = 0;
         if (up !=0) {
           player.vel.y = -player.ysp;
         }
       }
-    }
+    
     if (player.per.y >= map.y6-map.h6) {//if player is on 3rd platform he can jump and and wont fall thru
       player.vel.y = 0;
       if (up !=0) {
         player.vel.y = -player.ysp;
       }
     }
-    if (enemy.health4 <0 && enemy.health5 <0 && enemy.health6 <0) {//if all enemies die
-      if (player.per.x+35<= 0 && player.per.y > height/2) {//if player crosses from 1st platform to the right he enters 2nd level
+    if (enemy.draw4 == false) {//if all enemies die
+      if (player.per.x+35 >= width && player.per.y > height/2-100) {//if player crosses from 1st platform to the right he enters 2nd level
         nextlevel = 2;//enter 2nd level
         player.per.x = 0;
         player.per.y = 0;
@@ -637,8 +638,6 @@ void survival() {
   player.survivalhealth();//shows survival health
   shoot.displayright();//shows when a shot is shot to the right
   shoot.displayleft();//shows when a shot is shot to the left
-  shoot.updatesurvivalleft();//updates when a shot is shot to the left
-  shoot.updatesurvivalright();//updates when a shot is shot to the right
   pushMatrix();
   imageMode(CENTER);
   PImage frameImagered = getSubImage(player.imagered, player.frameRow, player.frameColumn, 100, 105);
