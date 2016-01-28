@@ -8,7 +8,8 @@ import ddf.minim.ugens.*;
 
 Sprite player;//creates a Sprite under the name player
 Map map;//Map under the name map
-Enemy enemy;//enemy called enemy
+//Enemy enemy;//enemy called enemy
+ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 Levels level;//level
 Shooter shoot;//shoot command for shooter (gun)
 Minim minim;//initializes minim
@@ -36,13 +37,13 @@ float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, c, z, d, rw4,
 PImage zig, dreams, back, load, campaignbackground;//various pictures used later
 PFont cool;//creates PFont "cool"
 float loadx, loadw, loadfill, stage, nextlevel;//creates floats to be able to change levels and stages consecutively without key presses
-float customtime = 1,customtime2 = 1;//used later on for loading screen of campaign
+float customtime = 1, customtime2 = 1;//used later on for loading screen of campaign
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
 }
 void setup() {
   size(1000, 800);
-  enemy = new Enemy();
+  //enemy = new Enemy();
   player = new Sprite();
   map = new Map();
   level = new Levels();
@@ -52,6 +53,7 @@ void setup() {
   loadx = 0;
   loadw = 10;
   nextlevel = 1;
+  enemies.add(new Enemy(random(400, 560), height/2-255, -random(1, 2), 0, 600));
   vy = 5;
   vy = 5;
   stage=1;
@@ -378,41 +380,51 @@ void keyReleased() {
 void campaign() {
   if (nextlevel==1) {//map level 1 and its properties
     map.display2();
-    enemy.displaylvl2();
-    enemy.updatelvl2();
+    for (int i = enemies.size()-1; i >= 0; i--) {
+      Enemy e = enemies.get(i);
+      e.display();
+      e.move();
+      e.isInContactEnemyfromLeft();
+      e.isInContactEnemyfromRight();
+      if (e.alive == false) {
+        enemies.remove(i);
+      }
+    }
+    //enemy.displaylvl2();
+    //enemy.updatelvl2();
     shoot.updateleftlvl2();
     shoot.updaterightlvl2();
-    enemy.enemydissapearlvl2();
-    enemy.isInContactEnemyfromRight4();
-    enemy.isInContactEnemyfromLeft4();
-    enemy.isEnemyinContactWith4();
-    enemy.isEnemyinContactWith5();
-    enemy.isEnemyinContactWith6();
-    if (enemy.health4 > -2) {
-      if (player.per.y >= map.y4-map.h4-10 &&  player.per.x > map.x4) {//when the player is on the 1st platform he can jump on the other platforms and wont fall thru, so long as the other enemies are still alive
-        player.vel.y = 0;
-        if (up !=0) {
-          player.vel.y= -player.ysp;
-        }
-      } else if (player.per.y>=map.y4-map.h4 && player.per.x > map.x4) {//if not on 1st platform falls to floor 
-        player.vel.y += grav-0.1;
+    //enemy.enemydissapearlvl2();
+    //enemy.isInContactEnemyfromRight4();
+    //enemy.isInContactEnemyfromLeft4();
+    //enemy.isEnemyinContactWith4();
+    //enemy.isEnemyinContactWith5();
+    //enemy.isEnemyinContactWith6();
+    //if (enemy.health4 > -2) {
+    if (player.per.y >= map.y4-map.h4-10 &&  player.per.x > map.x4) {//when the player is on the 1st platform he can jump on the other platforms and wont fall thru, so long as the other enemies are still alive
+      player.vel.y = 0;
+      if (up !=0) {
+        player.vel.y= -player.ysp;
+      }
+    } else if (player.per.y>=map.y4-map.h4 && player.per.x > map.x4) {//if not on 1st platform falls to floor 
+      player.vel.y += grav-0.1;
+    }
+    //}
+    //if (enemy.health5 > -2) {
+    if (player.per.y >= map.y5-map.h5 && player.per.x < map.w5) {//if on 2nd platform player can jump and wont fall thru
+      player.vel.y = 0;
+      if (up !=0) {
+        player.vel.y = -player.ysp;
       }
     }
-    if (enemy.health5 > -2) {
-      if (player.per.y >= map.y5-map.h5 && player.per.x < map.w5) {//if on 2nd platform player can jump and wont fall thru
-        player.vel.y = 0;
-        if (up !=0) {
-          player.vel.y = -player.ysp;
-        }
-      }
-    }
+    //}
     if (player.per.y >= map.y6-map.h6) {//if player is on 3rd platform he can jump and and wont fall thru
       player.vel.y = 0;
       if (up !=0) {
         player.vel.y = -player.ysp;
       }
     }
-    if (enemy.health4 <0 && enemy.health5 <0 && enemy.health6 <0) {//if all enemies die
+    if (enemies.size() == 0) {//if all enemies die
       if (player.per.x+35<= 0 && player.per.y > height/2) {//if player crosses from 1st platform to the right he enters 2nd level
         nextlevel = 2;//enter 2nd level
         player.per.x = 0;
@@ -424,76 +436,81 @@ void campaign() {
       }
     }
   }
+
+  /*
   if (nextlevel == 2) {//2nd level and its properties
-    map.display();
-    shoot.updateleftlvl1();
-    shoot.updaterightlvl1();
-    enemy.displaylvl1();
-    enemy.updatelvl1();
-    enemy.enemydissapearlvl1();
-    enemy.isInContactEnemyfromRight();
-    enemy.isInContactEnemyfromLeft();
-    enemy.isInContactEnemyfromRight2();
-    enemy.isInContactEnemyfromLeft2();
-    enemy.isInContactEnemyfromRight3();
-    enemy.isInContactEnemyfromLeft3();
-    enemy.isEnemyinContactWith1();
-    enemy.isEnemyinContactWith2();
-    enemy.isEnemyinContactWith3();
-    if (enemy.health >-2) {
-      if (player.per.y >= map.y-map.h && player.per.x < map.w) {//if your on the 1st platform on the second level, you can jump up and on other platforms and wont fall thru
-        player.vel.y = 0;
-        if (up !=0) {
-          player.vel.y= -player.ysp;
-        }
-      } else if (player.per.y>map.h && player.per.x< map.w) {//if not player brought down by gravity
-        player.vel.y += grav;
-      }
-    }
-    if (enemy.health2>-2) {
-      if (player.per.y > map.y2-map.h2 && player.per.x > map.x2 ) {//if enemy is alive and player is on 2nd platform he can jump around and wont fall thru
-        player.vel.y =0;
-        if (up !=0) {
-          player.vel.y = -player.ysp;
-        }
-      }
-    }
-
-    if (player.per.y >= map.y3-map.h3) {//when player is on 3rd platform he can jump and wont fall thru
-      player.vel.y = 0;
-      if (up !=0) {
-        player.vel.y = -player.ysp;
-      }
-    }
-
-    if (enemy.health <0 && enemy.health2 <0 && enemy.health3 <0) {//when all enemies die player can go onto level 3, boss level
-      if (player.per.x-35>= width && player.per.y > height/2) {
-        nextlevel = 3;
-        player.per.x = 0;
-        player.per.y = 0;
-      }
-    } else {
-      if (player.per.x + 40 > width) {
-        player.per.x = width-40;
-      }
-    }
-  }
+   map.display();
+   shoot.updateleftlvl1();
+   shoot.updaterightlvl1();
+   enemy.displaylvl1();
+   enemy.updatelvl1();
+   enemy.enemydissapearlvl1();
+   enemy.isInContactEnemyfromRight();
+   enemy.isInContactEnemyfromLeft();
+   enemy.isInContactEnemyfromRight2();
+   enemy.isInContactEnemyfromLeft2();
+   enemy.isInContactEnemyfromRight3();
+   enemy.isInContactEnemyfromLeft3();
+   enemy.isEnemyinContactWith1();
+   enemy.isEnemyinContactWith2();
+   enemy.isEnemyinContactWith3();
+   if (enemy.health >-2) {
+   if (player.per.y >= map.y-map.h && player.per.x < map.w) {//if your on the 1st platform on the second level, you can jump up and on other platforms and wont fall thru
+   player.vel.y = 0;
+   if (up !=0) {
+   player.vel.y= -player.ysp;
+   }
+   } else if (player.per.y>map.h && player.per.x< map.w) {//if not player brought down by gravity
+   player.vel.y += grav;
+   }
+   }
+   if (enemy.health2>-2) {
+   if (player.per.y > map.y2-map.h2 && player.per.x > map.x2 ) {//if enemy is alive and player is on 2nd platform he can jump around and wont fall thru
+   player.vel.y =0;
+   if (up !=0) {
+   player.vel.y = -player.ysp;
+   }
+   }
+   }
+   
+   if (player.per.y >= map.y3-map.h3) {//when player is on 3rd platform he can jump and wont fall thru
+   player.vel.y = 0;
+   if (up !=0) {
+   player.vel.y = -player.ysp;
+   }
+   }
+   
+   if (enemy.health <0 && enemy.health2 <0 && enemy.health3 <0) {//when all enemies die player can go onto level 3, boss level
+   if (player.per.x-35>= width && player.per.y > height/2) {
+   nextlevel = 3;
+   player.per.x = 0;
+   player.per.y = 0;
+   }
+   } else {
+   if (player.per.x + 40 > width) {
+   player.per.x = width-40;
+   }
+   }
+   }
+   */
+  /*
   if (nextlevel==3) {//level 3:boss level
-    map.displayBOSS();//all of the boss level's properties
-    enemy.bossdisplay();
-    enemy.updateboss();
-    enemy.isBOSSinContactWith();
-    enemy.isInContactBOSSfromRight();
-    enemy.isInContactBOSSfromLeft();
-    shoot.updateBOSSright();
-    shoot.updateBOSSleft();
-    if (player.per.y >= map.yBOSS-54) {//if player is on platform he can jump and wont fall thru
-      player.vel.y = 0;
-      if (up !=0) {
-        player.vel.y = -player.ysp;
-      }
-    }
-  }
+   map.displayBOSS();//all of the boss level's properties
+   enemy.bossdisplay();
+   enemy.updateboss();
+   enemy.isBOSSinContactWith();
+   enemy.isInContactBOSSfromRight();
+   enemy.isInContactBOSSfromLeft();
+   shoot.updateBOSSright();
+   shoot.updateBOSSleft();
+   if (player.per.y >= map.yBOSS-54) {//if player is on platform he can jump and wont fall thru
+   player.vel.y = 0;
+   if (up !=0) {
+   player.vel.y = -player.ysp;
+   }
+   }
+   }
+   */
   pushMatrix();
   imageMode(CENTER);
   translate(player.per.x, player.per.y);
@@ -631,7 +648,7 @@ void campaign() {
       stage = 2;//menu
     }
   }
-  enemy.bossdissapear();//rip boss :((
+  //enemy.bossdissapear();//rip boss :((
 }
 
 void survival() {  
