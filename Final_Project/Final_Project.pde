@@ -36,7 +36,7 @@ float x, y, vy, vx, rh, rw1, rw2, rw3, rx, ry1, ry2, ry3, c, z, d, rw4,
 PImage zig, dreams, back, load, campaignbackground;//various pictures used later
 PFont cool;//creates PFont "cool"
 float loadx, loadw, loadfill, stage, nextlevel;//creates floats to be able to change levels and stages consecutively without key presses
-float customtime = 1;//used later on for loading screen of campaign
+float customtime = 1,customtime2 = 1;//used later on for loading screen of campaign
 PImage getSubImage(PImage image, int row, int column, int frameWidth, int frameHeight) {
   return image.get(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
 }
@@ -247,8 +247,8 @@ void draw() {
     textAlign(CENTER);//extra code?
     text(s, 15, height/2-200, 980, 780);//coordinates of string s
     textSize(48);//size for Loading
-    if (customtime < 10000) {//same thing as the campaign loading screen
-      customtime+=50;
+    if (customtime2 < 10000) {//same thing as the campaign loading screen
+      customtime2+=50;
       loadfill-=5;
       if (loadfill < 0) {
         loadfill = 255;
@@ -256,7 +256,7 @@ void draw() {
       fill(loadfill);  
       text("Loading...", width/2, 750);//Loading
     }
-    if (customtime >10000) {
+    if (customtime2 >10000) {
       fill(255);
       text("NOW SURVIVE", width/2, 750);
       if (mousePressed) {
