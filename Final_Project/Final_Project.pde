@@ -51,7 +51,7 @@ void setup() {
   y = height/2;
   loadx = 0;
   loadw = 10;
-  nextlevel = 2;
+  nextlevel = 1;
   vy = 5;
   vy = 5;
   stage=1;
