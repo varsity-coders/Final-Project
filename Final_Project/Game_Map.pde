@@ -40,7 +40,7 @@ class Map {
     rect(x, y, w, h);
     rect(x2, y2, w2, h2);
     rect(x3, y3, w3, h3);
-    if (enemy.draw3 == false) {
+    if (enemy.draw3 == false && enemy.draw == false && enemy.draw2 == false) {
       fill(0);
       textSize(32);
       text("Proceed to Boss", 565, 550);

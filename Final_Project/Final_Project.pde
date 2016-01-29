@@ -377,9 +377,6 @@ void keyReleased() {
 } 
 void campaign() {
   if (nextlevel==1) {//map level 1 and its properties
-  println(enemy.health);
-    println(enemy.health2);
-      println(enemy.health3);
     map.display2();
     enemy.displaylvl2();
     enemy.updatelvl2();
