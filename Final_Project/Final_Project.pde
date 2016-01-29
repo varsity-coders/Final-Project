@@ -149,9 +149,10 @@ void draw() {
   }
 
   if (stage==2) {
+    imageMode(CENTER);
     background(0);//black background
     zig = loadImage("ZIG.png");//loads zigzag image in the background
-    image(zig, 0, 150, 1000, 300);//coordinates
+    image(zig, 500,300, 1000, 300);//coordinates
     fill(255);//fill of following text
     textSize(60);//size
     textAlign(CENTER);//centered
@@ -266,21 +267,16 @@ void draw() {
   }
   if (stage==4) {
     survival();
+    textSize(20);
+    text("YOU CAN'T MOVE! THE NIGHTMARES ARE CONSUMING YOU", 500,250);
   }
   if (stage==4.5) {
     background(0);
     textSize(32);
     textAlign(CENTER);
     text("THE NIGTMARES HAVE CONSUMED YOU", width/2, height/2);
-    text("PRESS SPACE TO GO BACK TO MENU", width/2, height/2+100);
-    if (mousePressed) {
-      if (key == ' ') {
-        stage = 2;
-        night.pause();
-        full.rewind();
-        full.play();
-      }
-    }
+    textSize(27);
+    text("YOU HAVE WOKEN UP FROM YOUR DREAMS! OR HAVE YOU...", width/2, height/2+100);
   }
   if (stage==5) {//stage 5 is the settings page/instructions page
     background(0);//black background
